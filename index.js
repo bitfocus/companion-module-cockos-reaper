@@ -258,8 +258,8 @@ instance.prototype.action = function(action) {
 
 	};
 	if (cmd !== undefined)  {
-			debug('sending',cmd,args,"to",self.config.host);
-			self.system.emit('osc_send', self.config.host, self.config.port, cmd, args);
+		debug('sending',cmd,args,"to",self.config.host);
+		self.system.emit('osc_send', self.config.host, self.config.port, cmd, args);
 	}
 };
 
