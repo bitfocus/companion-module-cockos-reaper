@@ -42,14 +42,14 @@ instance.prototype.config_fields = function () {
 			tooltip: 'The IP of the computer running REAPER',
 			regex: self.REGEX_IP
 		},
-    {
-      type: 'textinput',
-      id: 'port',
-      label: 'Target Port',
-      width: 3,
-      tooltip: 'The port REAPER is listening to OSC on',
-      regex: self.REGEX_SIGNED_NUMBER
-    }
+		{
+			type: 'textinput',
+			id: 'port',
+			label: 'Target Port',
+			width: 3,
+			tooltip: 'The port REAPER is listening to OSC on',
+			regex: self.REGEX_SIGNED_NUMBER
+		}
 	]
 };
 
@@ -63,38 +63,38 @@ instance.prototype.destroy = function() {
 instance.prototype.actions = function(system) {
 	var self = this;
 	self.system.emit('instance_actions', self.id, {
-    'record':	        {label: 'Record'},
-    'play':	          {label: 'Play'},
-    'stop':	          {label: 'Stop'},
-    'pause':	        {label: 'Pause'},
-    'autorecarm':	    {label: 'Autoarm Record'},
-    'soloreset':      {label: 'Reset Solos'},
-    'rewind':	        {label: 'Rewind'},
-    'forward':	      {label: 'Forward'},
-    'click':	        {label: 'Click/Metronome'},
+		'record':	        {label: 'Record'},
+		'play':	          {label: 'Play'},
+		'stop':	          {label: 'Stop'},
+		'pause':	        {label: 'Pause'},
+		'autorecarm':	    {label: 'Autoarm Record'},
+		'soloreset':      {label: 'Reset Solos'},
+		'rewind':	        {label: 'Rewind'},
+		'forward':	      {label: 'Forward'},
+		'click':	        {label: 'Click/Metronome'},
 
-    'goto_marker':	{
-      label: 'Go To Marker',
-      options: [
-        {
-          type: 'textinput',
-          label: 'Marker Number',
-          id: 'marker',
-          default: "1"
-        }
-      ]
-    },
-    'goto_region':	{
-      label: 'Go To Region',
-      options: [
-        {
-          type: 'textinput',
-          label: 'Region Number',
-          id: 'region',
-          default: "1"
-        }
-      ]
-    },
+		'goto_marker':	{
+			label: 'Go To Marker',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Marker Number',
+					id: 'marker',
+					default: "1"
+				}
+			]
+		},
+		'goto_region':	{
+			label: 'Go To Region',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Region Number',
+					id: 'region',
+					default: "1"
+				}
+			]
+		},
 		'track_mute':	{
 			label: 'Track Mute',
 			options: [
@@ -106,28 +106,28 @@ instance.prototype.actions = function(system) {
 				}
 			]
 		},
-    'track_solo':	{
-      label: 'Track Solo',
-      options: [
-        {
-          type: 'textinput',
-          label: 'Track',
-          id: 'track',
-          default: "1"
-        }
-      ]
-    },
-    'track_arm':	{
-      label: 'Track Arm',
-      options: [
-        {
-          type: 'textinput',
-          label: 'Track',
-          id: 'track',
-          default: "1"
-        }
-      ]
-    },
+		'track_solo':	{
+			label: 'Track Solo',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Track',
+					id: 'track',
+					default: "1"
+				}
+			]
+		},
+		'track_arm':	{
+			label: 'Track Arm',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Track',
+					id: 'track',
+					default: "1"
+				}
+			]
+		},
 		'track_unmute':	{
 			label: 'Track Unmute',
 			options: [
@@ -172,17 +172,17 @@ instance.prototype.action = function(action) {
 
 	switch (action.action) {
 
-    case 'record':
+		case 'record':
 			arg = null
 			cmd = '/record';
 			break;
 
-    case 'play':
+		case 'play':
 			arg = null
 			cmd = '/play';
 			break;
 
-    case 'stop':
+		case 'stop':
 			arg = null
 			cmd = '/stop';
 			break;
@@ -192,54 +192,54 @@ instance.prototype.action = function(action) {
 			cmd = '/pause';
 			break;
 
-    case 'autorecarm':
-  		arg = null
-  		cmd = '/autorecarm';
-  		break;
+		case 'autorecarm':
+			arg = null
+			cmd = '/autorecarm';
+			break;
 
-    case 'soloreset':
+		case 'soloreset':
 			arg = null
 			cmd = '/soloreset';
 			break;
 
-    case 'rewind':
-      arg = null
-      cmd = '/rewind';
-      break;
+		case 'rewind':
+			arg = null
+			cmd = '/rewind';
+			break;
 
-    case 'forward':
-      arg = null
-      cmd = '/forward';
-      break;
+		case 'forward':
+			arg = null
+			cmd = '/forward';
+			break;
 
-    case 'click':
-      arg = null
-      cmd = '/click';
-      break;
+		case 'click':
+			arg = null
+			cmd = '/click';
+			break;
 
-    case 'goto_marker':
-      cmd = '/marker/' + opt.marker;
-      break;
+		case 'goto_marker':
+			cmd = '/marker/' + opt.marker;
+			break;
 
-    case 'goto_region':
-      arg = null
-      cmd = '/region/' + opt.region;
-      break;
+		case 'goto_region':
+			arg = null
+			cmd = '/region/' + opt.region;
+			break;
 
-    case 'track_mute':
-      args.push({ type: 'i', value: '1' });
-      cmd = '/track/' + opt.track + '/mute';
-      break;
+		case 'track_mute':
+			args.push({ type: 'i', value: '1' });
+			cmd = '/track/' + opt.track + '/mute';
+			break;
 
-    case 'track_solo':
-      args.push({ type: 'i', value: '1' });
-      cmd = '/track/' + opt.track + '/solo';
-      break;
+		case 'track_solo':
+			args.push({ type: 'i', value: '1' });
+			cmd = '/track/' + opt.track + '/solo';
+			break;
 
-    case 'track_arm':
-      args.push({ type: 'i', value: '1' });
-      cmd = '/track/' + opt.track + '/recarm';
-      break;
+		case 'track_arm':
+			args.push({ type: 'i', value: '1' });
+			cmd = '/track/' + opt.track + '/recarm';
+			break;
 
 		case 'track_unmute':
 			args.push({ type: 'i', value: '0' });
@@ -258,9 +258,9 @@ instance.prototype.action = function(action) {
 
 	};
 	if (cmd !== undefined)  {
-      debug('sending',cmd,args,"to",self.config.host);
-      self.system.emit('osc_send', self.config.host, self.config.port, cmd, args);
-  }
+			debug('sending',cmd,args,"to",self.config.host);
+			self.system.emit('osc_send', self.config.host, self.config.port, cmd, args);
+	}
 };
 
 instance.module_info = {
