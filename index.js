@@ -263,11 +263,5 @@ instance.prototype.action = function(action) {
 	}
 };
 
-instance.module_info = {
-	label: 'REAPER',
-	id: 'cockos-reaper',
-	version: '1.0.1'
-};
-
 instance_skel.extendedBy(instance);
 exports = module.exports = instance;
