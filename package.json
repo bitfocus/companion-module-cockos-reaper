@@ -1,11 +1,17 @@
 {
-  "name": "cockos-reaper",
-  "version": "1.0.0",
-  "description": "A Companion Module to control the REAPER DAW by Cockos",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Oliver Herrmann",
-  "license": "MIT"
+	"name": "cockos-reaper",
+	"version": "1.0.0",
+	"description": "Cockos REAPER module for Companion",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"license": "MIT",
+	"api_version": "1.0.0",
+	"keywords": [ "Audio", "Software", "Recording" ],
+	"manufacturer": "cockos",
+	"product": "REAPER",
+	"shortname": "reaper",
+	"homepage": "https://www.reaper.fm",
+	"author": "Oliver Herman <oliver@monoxane.com>"
 }
