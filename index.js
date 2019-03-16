@@ -268,7 +268,13 @@ instance.prototype.action = function(action) {
 			break;
 		
 		case 'custom_action':
-			cmd = '/action/' + opt.action_cmd_id;
+			// Integer & String commandID's are sent differently...
+			if (parseInt() > 0) {
+				cmd = '/action/' + opt.action_cmd_id;
+			} else {
+				args.push({ type: 's', value: opt.action_cmd_id});
+				cmd = '/action/str';
+			}
 			break;
 
 	};
