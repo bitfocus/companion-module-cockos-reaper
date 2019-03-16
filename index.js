@@ -160,6 +160,17 @@ instance.prototype.actions = function(system) {
 					default: "1"
 				}
 			]
+		},
+		'custom_action':	{
+			label: 'Custom Action',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Action Command ID',
+					id: 'action_cmd_id',
+					default: "1007"
+				}
+			]
 		}
 	});
 }
@@ -254,6 +265,10 @@ instance.prototype.action = function(action) {
 		case 'track_unarm':
 			args.push({ type: 'i', value: '0' });
 			cmd = '/track/' + opt.track + '/recarm';
+			break;
+		
+		case 'custom_action':
+			cmd = '/action/' + opt.action_cmd_id;
 			break;
 
 	};
