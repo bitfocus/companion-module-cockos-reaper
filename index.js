@@ -184,42 +184,34 @@ instance.prototype.action = function(action) {
 	switch (action.action) {
 
 		case 'record':
-			arg = null
 			cmd = '/record';
 			break;
 
 		case 'play':
-			arg = null
 			cmd = '/play';
 			break;
 
 		case 'stop':
-			arg = null
 			cmd = '/stop';
 			break;
 
 		case 'pause':
-			arg = null
 			cmd = '/pause';
 			break;
 
 		case 'autorecarm':
-			arg = null
 			cmd = '/autorecarm';
 			break;
 
 		case 'soloreset':
-			arg = null
 			cmd = '/soloreset';
 			break;
 
 		case 'rewind':
-			arg = null
 			cmd = '/rewind';
 			break;
 
 		case 'forward':
-			arg = null
 			cmd = '/forward';
 			break;
 
@@ -233,7 +225,6 @@ instance.prototype.action = function(action) {
 			break;
 
 		case 'goto_region':
-			arg = null
 			cmd = '/region/' + opt.region;
 			break;
 
