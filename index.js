@@ -269,7 +269,7 @@ instance.prototype.action = function(action) {
 		
 		case 'custom_action':
 			// Integer & String commandID's are sent differently...
-			if (parseInt() > 0) {
+			if (parseInt(opt.action_cmd_id) > 0) {
 				cmd = '/action/' + opt.action_cmd_id;
 			} else {
 				args.push({ type: 's', value: opt.action_cmd_id});
