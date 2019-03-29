@@ -160,6 +160,17 @@ instance.prototype.actions = function(system) {
 					default: "1"
 				}
 			]
+		},
+		'custom_action':	{
+			label: 'Custom Action',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Action Command ID',
+					id: 'action_cmd_id',
+					default: "1007"
+				}
+			]
 		}
 	});
 }
@@ -173,42 +184,34 @@ instance.prototype.action = function(action) {
 	switch (action.action) {
 
 		case 'record':
-			arg = null
 			cmd = '/record';
 			break;
 
 		case 'play':
-			arg = null
 			cmd = '/play';
 			break;
 
 		case 'stop':
-			arg = null
 			cmd = '/stop';
 			break;
 
 		case 'pause':
-			arg = null
 			cmd = '/pause';
 			break;
 
 		case 'autorecarm':
-			arg = null
 			cmd = '/autorecarm';
 			break;
 
 		case 'soloreset':
-			arg = null
 			cmd = '/soloreset';
 			break;
 
 		case 'rewind':
-			arg = null
 			cmd = '/rewind';
 			break;
 
 		case 'forward':
-			arg = null
 			cmd = '/forward';
 			break;
 
@@ -222,7 +225,6 @@ instance.prototype.action = function(action) {
 			break;
 
 		case 'goto_region':
-			arg = null
 			cmd = '/region/' + opt.region;
 			break;
 
@@ -254,6 +256,16 @@ instance.prototype.action = function(action) {
 		case 'track_unarm':
 			args.push({ type: 'i', value: '0' });
 			cmd = '/track/' + opt.track + '/recarm';
+			break;
+		
+		case 'custom_action':
+			// Integer & String commandID's are sent differently...
+			if (parseInt(opt.action_cmd_id) > 0) {
+				cmd = '/action/' + opt.action_cmd_id;
+			} else {
+				args.push({ type: 's', value: opt.action_cmd_id});
+				cmd = '/action/str';
+			}
 			break;
 
 	};
