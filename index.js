@@ -69,11 +69,13 @@ instance.prototype.actions = function(system) {
 		'pause':	        {label: 'Pause'},
 		'autorecarm':	    {label: 'Autoarm Record'},
 		'soloreset':      {label: 'Reset Solos'},
-		'rewind':	        {label: 'Rewind'},
-		'forward':	      {label: 'Forward'},
 		'click':	        {label: 'Click/Metronome'},
 
 		'goto_marker':	{
+		'start_rewind': {label: 'Rewind (Start)'},
+		'stop_rewind': {label: 'Rewind (Stop)'},
+		'start_forward': {label: 'Forward (Start)'},
+		'stop_forward': {label: 'Forward (Stop)'},
 			label: 'Go To Marker',
 			options: [
 				{
@@ -207,11 +209,23 @@ instance.prototype.action = function(action) {
 			cmd = '/soloreset';
 			break;
 
-		case 'rewind':
+		case 'start_rewind':
+			args.push({type: 'i', value: '1'});
 			cmd = '/rewind';
 			break;
 
-		case 'forward':
+		case 'stop_rewind':
+			args.push({type: 'i', value: '0'});
+			cmd = '/rewind';
+			break;
+
+		case 'start_forward':
+			args.push({type: 'i', value: '1'});
+			cmd = '/forward';
+			break;
+
+		case 'stop_forward':
+			args.push({type: 'i', value: '0'});
 			cmd = '/forward';
 			break;
 
