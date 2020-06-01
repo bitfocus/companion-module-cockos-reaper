@@ -81,7 +81,7 @@ module.exports = {
 					type:    'colorpicker',
 					label:   'Background color',
 					id:      'bg',
-					default: self.rgb(0, 255, 0)
+					default: self.rgb(183, 0, 0)
 				},
 				{
 					type:    'dropdown',
@@ -166,7 +166,7 @@ module.exports = {
 					type:    'colorpicker',
 					label:   'Background color',
 					id:      'bg',
-					default: self.rgb(11, 138, 179)
+					default: self.rgb(153, 0, 153)
 				},
 				{
 					type:    'dropdown',
@@ -195,7 +195,7 @@ module.exports = {
 					type:    'colorpicker',
 					label:   'Background color',
 					id:      'bg',
-					default: self.rgb(0, 255, 0)
+					default: self.rgb(11, 138, 179)
 				},
 				{
 					type:    'dropdown',
