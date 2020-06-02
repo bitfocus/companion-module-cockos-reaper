@@ -16,5 +16,8 @@
 	},
 	"license": "MIT",
 	"homepage": "https://www.reaper.fm",
-	"author": "Oliver Herman <oliver@monoxane.com>"
+	"author": "Oliver Herman <oliver@monoxane.com>",
+	"contributors": [
+		"Oded Davidov <davidovoded@gmail.com>"
+	]
 }
