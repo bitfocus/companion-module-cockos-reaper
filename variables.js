@@ -61,13 +61,13 @@ module.exports = {
 			label: 'Rewind Status',
 			name:  'rewindStatus'
 		});
-		self.setVariable('recordStatus', rewindStatus);
+		self.setVariable('rewindStatus', rewindStatus);
 
 		variables.push({
 			label: 'Fast Forward Status',
 			name:  'forwardStatus'
 		});
-		self.setVariable('recordStatus', forwardStatus);
+		self.setVariable('forwardStatus', forwardStatus);
 
 		variables.push({
 			label: 'Repeat Status',
