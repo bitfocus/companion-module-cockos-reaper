@@ -37,7 +37,12 @@ module.exports = {
 						{id: 'Paused', label: 'Paused'}
 					]
 				}
-			]
+			],
+			callback: (feedback, bank) => {
+				if (this.playStatus === feedback.options.playPause) {
+					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+				}
+			}
 		}
 		feedbacks['stopStatus']    = {
 			label:       'Change colors based on Stop status',
@@ -65,7 +70,11 @@ module.exports = {
 						{id: 'Playing', label: 'Playing'}
 					]
 				}
-			]
+			], callback: (feedback, bank) => {
+				if (this.stopStatus === feedback.options.stopPlay) {
+					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+				}
+			}
 		}
 		feedbacks['recordStatus']  = {
 			label:       'Change colors based on Record status',
@@ -93,7 +102,11 @@ module.exports = {
 						{id: 'Not Recording', label: 'Not Recording'}
 					]
 				}
-			]
+			], callback: (feedback, bank) => {
+				if (this.recordStatus === feedback.options.recordOrNot) {
+					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+				}
+			}
 		}
 		feedbacks['rewindStatus']  = {
 			label:       'Change colors based on Rewind status',
@@ -121,7 +134,11 @@ module.exports = {
 						{id: 'Not Rewinding', label: 'Not Rewinding'}
 					]
 				}
-			]
+			], callback: (feedback, bank) => {
+				if (this.rewindStatus === feedback.options.rewindOrNot) {
+					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+				}
+			}
 		}
 		feedbacks['forwardStatus'] = {
 			label:       'Change colors based on Fast Forward status',
@@ -149,7 +166,11 @@ module.exports = {
 						{id: 'Not Forwarding', label: 'Not Forwarding'}
 					]
 				}
-			]
+			], callback: (feedback, bank) => {
+				if (this.forwardStatus === feedback.options.forwardOrNot) {
+					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+				}
+			}
 		}
 
 		feedbacks['repeatStatus'] = {
@@ -178,7 +199,11 @@ module.exports = {
 						{id: 'Inactive', label: 'Inactive'}
 					]
 				}
-			]
+			], callback: (feedback, bank) => {
+				if (this.repeatStatus === feedback.options.repeatOrNot) {
+					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+				}
+			}
 		}
 
 		feedbacks['clickStatus'] = {
@@ -207,7 +232,11 @@ module.exports = {
 						{id: 'Inactive', label: 'Inactive'}
 					]
 				}
-			]
+			], callback: (feedback, bank) => {
+				if (this.clickStatus === feedback.options.clickOrNot) {
+					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+				}
+			}
 		}
 
 		feedbacks['customMessage'] = {
@@ -248,10 +277,25 @@ module.exports = {
 					id:      'value',
 					default: '1'
 				}
-			]
+			], callback: (feedback, bank) => {
+				var self = this;
+				var foundFeedback;
+				self.customMessages.forEach(function (customMessage, index) {
+					if (self.customMessageStatus[customMessage.id].toString() === feedback.options.value) {
+						if (customMessage.address === feedback.options.msg &&
+							customMessage.args.type === feedback.options.type &&
+							customMessage.args.value.toString() === feedback.options.value
+						) {
+							foundFeedback = feedback
+						}
+					}
+				});
+				if (foundFeedback !== undefined) {
+					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+				}
+			}
 		}
 		return feedbacks;
-
 	},
 
 	// Condenses feedback options to an object containing id and default value alone for all feedback options
