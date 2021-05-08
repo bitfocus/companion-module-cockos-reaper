@@ -188,6 +188,25 @@ module.exports = {
 						options: self.getFeedbackDefaults('clickStatus')
 					}
 				]
+			},
+			{
+				category: 'General',
+				label:    'Refresh all control surfaces',
+				bank:     {
+					style:   'text',
+					text:    'Refresh OSC',
+					size:    '7',
+					color:   '16777215',
+					bgcolor: '0',
+				},
+				actions:  [
+					{
+						action:  'custom_action',
+						options: {
+							action_cmd_id: '41743'
+						}
+					}
+				]
 			}
 
 
