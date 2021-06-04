@@ -36,6 +36,13 @@ This module connects to the Cockos Reaper software.
 * Track Unmute
 * Track Unsolo
 * Track Unarm
+* Track Mute (toggle)
+* Track Solo (toggle)
+* Track Arm (toggle)
+* Track FX Bypass
+* Track FX Open UI
+* Track FX Unbypass
+* Track FX Close UI
 * Custom Action
 
 ### Available feedbacks
@@ -47,6 +54,11 @@ Feedbacks are available to reflect the state of the following actions:
 * Forward
 * Repeat
 * Click/Metronome
+* Track Mute
+* Track Solo
+* Track Arm
+* Track FX Active
+* Track FX UI Open
 * Custom feedback based on an OSC message and its value
 
 ### Available presets
