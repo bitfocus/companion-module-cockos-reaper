@@ -57,6 +57,8 @@ Feedbacks are available to reflect the state of the following actions:
 * Track Mute
 * Track Solo
 * Track Arm
+* Track Monitoring
+* Track Selected
 * Track FX Active
 * Track FX UI Open
 * Custom feedback based on an OSC message and its value
