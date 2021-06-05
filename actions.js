@@ -143,6 +143,50 @@ module.exports = {
 					}
 				]
 			},
+			'track_select':     {
+				label:   'Track Select',
+				options: [
+					{
+						type:    'textinput',
+						label:   'Track',
+						id:      'track',
+						default: "1"
+					}
+				]
+			},
+			'track_deselect':     {
+				label:   'Track Deselect',
+				options: [
+					{
+						type:    'textinput',
+						label:   'Track',
+						id:      'track',
+						default: "1"
+					}
+				]
+			},
+			'track_monitor_enable':     {
+				label:   'Track Monitoring Enable',
+				options: [
+					{
+						type:    'textinput',
+						label:   'Track',
+						id:      'track',
+						default: "1"
+					}
+				]
+			},
+			'track_monitor_disable':     {
+				label:   'Track Monitoring Disable',
+				options: [
+					{
+						type:    'textinput',
+						label:   'Track',
+						id:      'track',
+						default: "1"
+					}
+				]
+			},
 			'track_fx_bypass':   {
 				label:   'Track Fx Bypass',
 				options: [
@@ -323,31 +367,59 @@ module.exports = {
 				args.push({type: 'i', value: '0'});
 				cmd = '/track/' + opt.track + '/recarm';
 				break;
+
 			case 'track_mute_toggle':
 				cmd = '/track/' + opt.track + '/mute/toggle';
 				break;
+
 			case 'track_solo_toggle':
 				cmd = '/track/' + opt.track + '/solo/toggle';
 				break;
+
 			case 'track_arm_toggle':
 				cmd = '/track/' + opt.track + '/recarm/toggle';
 				break;
+
+			case 'track_select':
+				args.push({type: 'i', value: '1'});
+				cmd = '/track/' + opt.track + '/select';
+				break;
+		
+			case 'track_deselect':
+				args.push({type: 'i', value: '0'});
+				cmd = '/track/' + opt.track + '/select';
+				break;
+
+			case 'track_monitor_enable':
+				args.push({type: 'i', value: '1'});
+				cmd = '/track/' + opt.track + '/monitor';
+				break;
+
+			case 'track_monitor_disable':
+				args.push({type: 'i', value: '0'});
+				cmd = '/track/' + opt.track + '/monitor';
+				break;
+
 			case 'track_fx_bypass':
 				args.push({type: 'i', value: '0'});
 				cmd = '/track/' + opt.track + '/fx/' + opt.fx + '/bypass';
 				break;
+
 			case 'track_fx_openui':
 				args.push({type: 'i', value: '1'});
 				cmd = '/track/' + opt.track + '/fx/' + opt.fx + '/openui';
 				break;
+
 			case 'track_fx_unbypass':
 				args.push({type: 'i', value: '1'}); // 1 to unbypass
 				cmd = '/track/' + opt.track + '/fx/' + opt.fx + '/bypass';
 				break;
+
 			case 'track_fx_closeui':
 				args.push({type: 'i', value: '0'});
 				cmd = '/track/' + opt.track + '/fx/' + opt.fx + '/openui';
 				break;
+
 			case 'custom_action':
 				// Integer & String commandID's are sent differently...
 				if (parseInt(opt.action_cmd_id) > 0) {
