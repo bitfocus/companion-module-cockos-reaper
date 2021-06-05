@@ -39,6 +39,10 @@ This module connects to the Cockos Reaper software.
 * Track Mute (toggle)
 * Track Solo (toggle)
 * Track Arm (toggle)
+* Track Select
+* Track Deselect
+* Track Monitoring Enable
+* Track Monitoring Disable
 * Track FX Bypass
 * Track FX Open UI
 * Track FX Unbypass
