@@ -295,6 +295,18 @@ module.exports = {
 				}
 			}
 		}
+
+		// Track Feedbacks
+		feedbacks['track_mute'] = self.createBooleanTrackFeedback('mute', 'Change color when a track is muted', 'Change color when a track is muted');
+		feedbacks['track_solo'] = self.createBooleanTrackFeedback('solo', 'Change color when a track is soloed', 'Change color when a track is soloed');
+		feedbacks['track_recarm'] = self.createBooleanTrackFeedback('recarm', 'Change color when a track is armed for recording', 'Change color when a track is armed for recording');
+		feedbacks['track_select'] = self.createBooleanTrackFeedback('select', 'Change color when a track is selected', 'Change color when a track is selected');
+		feedbacks['track_monitor'] = self.createBooleanTrackFeedback('monitor', 'Change color when monitoring is enabled for a track', 'Change color when monitoring is enabled for a track');
+
+		// Track FX Feedbacks
+		feedbacks['track_fx_bypass'] = self.createBooleanTrackFxFeedback('bypass', 'Change color when an FX is active', 'Change color when an FX is active');
+		feedbacks['track_fx_openui'] = self.createBooleanTrackFxFeedback('openui', 'Change color when an FX UI window is open', 'Change color when an FX UI window is open');
+		
 		return feedbacks;
 	},
 
@@ -305,5 +317,89 @@ module.exports = {
 			p[c[0]] = c[1];
 			return p;
 		}, {})
+	},
+
+	createBooleanTrackFeedback(propertyName, label, description)
+	{
+		var self = this;
+
+		return {
+			label:       label,
+			description: description,
+			options:     [
+				{
+					type:    'colorpicker',
+					label:   'Foreground color',
+					id:      'fg',
+					default: self.rgb(255, 255, 255)
+				},
+				{
+					type:    'colorpicker',
+					label:   'Background color',
+					id:      'bg',
+					default: self.rgb(0, 255, 0)
+				},
+				{
+					type:     'number',
+					label:    'Track Number',
+					id:       'trackNumber',
+					default:  1
+
+				}
+			], callback: (feedback, bank) => {
+				var self = this;
+
+				var track = self.getTrack(feedback.options.trackNumber);
+
+				if (track !== undefined && track[propertyName] === true)
+				{
+					return {color: feedback.options.fg, bgcolor: feedback.options.bg};
+				}
+			}
+		}
+	},
+
+	createBooleanTrackFxFeedback(propertyName, label, description) {
+		var self = this;
+
+		return {
+			label:       label,
+			description: description,
+			options:     [
+				{
+					type:    'colorpicker',
+					label:   'Foreground color',
+					id:      'fg',
+					default: self.rgb(255, 255, 255)
+				},
+				{
+					type:    'colorpicker',
+					label:   'Background color',
+					id:      'bg',
+					default: self.rgb(0, 255, 0)
+				},
+				{
+					type:     'number',
+					label:    'Track Number',
+					id:       'trackNumber',
+					default:  1
+				},
+				{
+					type:     'number',
+					label:    'FX Number',
+					id:       'fxNumber',
+					default:   1
+				}
+			], callback: (feedback, bank) => {
+				var self = this;
+
+				var fx = self.getTrackFx(feedback.options.trackNumber, feedback.options.fxNumber);
+
+				if (fx !== undefined && fx[propertyName] === true)
+				{
+					return {color: feedback.options.fg, bgcolor: feedback.options.bg};
+				}
+			}
+		}
 	}
 }
