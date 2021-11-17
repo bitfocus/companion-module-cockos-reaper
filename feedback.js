@@ -324,27 +324,19 @@ module.exports = {
 		var self = this;
 
 		return {
+			type:        'boolean',
 			label:       label,
 			description: description,
+			style:       {
+				color:	 self.rgb(255, 255, 255),
+				bgcolor: self.rgb(0, 255, 0)
+			},
 			options:     [
-				{
-					type:    'colorpicker',
-					label:   'Foreground color',
-					id:      'fg',
-					default: self.rgb(255, 255, 255)
-				},
-				{
-					type:    'colorpicker',
-					label:   'Background color',
-					id:      'bg',
-					default: self.rgb(0, 255, 0)
-				},
 				{
 					type:     'number',
 					label:    'Track Number',
 					id:       'trackNumber',
 					default:  1
-
 				}
 			], callback: (feedback, bank) => {
 				var self = this;
@@ -353,8 +345,10 @@ module.exports = {
 
 				if (track !== undefined && track[propertyName] === true)
 				{
-					return {color: feedback.options.fg, bgcolor: feedback.options.bg};
+					return true;
 				}
+
+				return false;
 			}
 		}
 	},
@@ -363,21 +357,14 @@ module.exports = {
 		var self = this;
 
 		return {
+			type:        'boolean',
 			label:       label,
 			description: description,
+			style:       {
+				color:	 self.rgb(255, 255, 255),
+				bgcolor: self.rgb(0, 255, 0)
+			},
 			options:     [
-				{
-					type:    'colorpicker',
-					label:   'Foreground color',
-					id:      'fg',
-					default: self.rgb(255, 255, 255)
-				},
-				{
-					type:    'colorpicker',
-					label:   'Background color',
-					id:      'bg',
-					default: self.rgb(0, 255, 0)
-				},
 				{
 					type:     'number',
 					label:    'Track Number',
@@ -397,8 +384,10 @@ module.exports = {
 
 				if (fx !== undefined && fx[propertyName] === true)
 				{
-					return {color: feedback.options.fg, bgcolor: feedback.options.bg};
+					return true;
 				}
+
+				return false;
 			}
 		}
 	}
