@@ -13,8 +13,8 @@ module.exports = {
 
 		feedbacks['playStatus']    = {
 			type:        'boolean',
-			label:       'Change colors based on Play/Pause status',
-			description: 'Change colors based on Play/Pause status',
+			label:       'Change style based on Play/Pause status',
+			description: 'Change style based on Play/Pause status',
 			style:       {
 				color:	 self.rgb(255, 255, 255),
 				bgcolor: self.rgb(0, 183, 0)
@@ -41,8 +41,8 @@ module.exports = {
 		}
 		feedbacks['stopStatus']    = {
 			type:        'boolean',
-			label:       'Change colors based on Stop status',
-			description: 'Change colors based on Stop status',
+			label:       'Change style based on Stop status',
+			description: 'Change style based on Stop status',
 			style:       {
 				color:	 self.rgb(255, 255, 255),
 				bgcolor: self.rgb(76, 76, 76)
@@ -68,8 +68,8 @@ module.exports = {
 		}
 		feedbacks['recordStatus']  = {
 			type:        'boolean',
-			label:       'Change colors based on Record status',
-			description: 'Change colors based on Record status',
+			label:       'Change style based on Record status',
+			description: 'Change style based on Record status',
 			style:       {
 				color:	 self.rgb(255, 255, 255),
 				bgcolor: self.rgb(183, 0, 0)
@@ -95,8 +95,8 @@ module.exports = {
 		}
 		feedbacks['rewindStatus']  = {
 			type:        'boolean',
-			label:       'Change colors based on Rewind status',
-			description: 'Change colors based on Rewind status',
+			label:       'Change style based on Rewind status',
+			description: 'Change style based on Rewind status',
 			style:       {
 				color:	 self.rgb(255, 255, 255),
 				bgcolor: self.rgb(249, 199, 0)
@@ -122,8 +122,8 @@ module.exports = {
 		}
 		feedbacks['forwardStatus'] = {
 			type:        'boolean',
-			label:       'Change colors based on Fast Forward status',
-			description: 'Change colors based on Fast Forward status',
+			label:       'Change style based on Fast Forward status',
+			description: 'Change style based on Fast Forward status',
 			style:       {
 				color:	 self.rgb(255, 255, 255),
 				bgcolor: self.rgb(249, 199, 0)
@@ -150,8 +150,8 @@ module.exports = {
 
 		feedbacks['repeatStatus'] = {
 			type:        'boolean',
-			label:       'Change colors based on Repeat status',
-			description: 'Change colors based on Repeat status',
+			label:       'Change style based on Repeat status',
+			description: 'Change style based on Repeat status',
 			style:       {
 				color:	 self.rgb(255, 255, 255),
 				bgcolor: self.rgb(153, 0, 153)
@@ -178,8 +178,8 @@ module.exports = {
 
 		feedbacks['clickStatus'] = {
 			type:        'boolean',
-			label:       'Change colors based on Click status',
-			description: 'Change colors based on Click status',
+			label:       'Change style based on Click status',
+			description: 'Change style based on Click status',
 			style:       {
 				color:	 self.rgb(255, 255, 255),
 				bgcolor: self.rgb(11, 138, 179)
@@ -206,8 +206,8 @@ module.exports = {
 
 		feedbacks['customMessage'] = {
 			type:        'boolean',
-			label:       'Change colors based on a custom OSC message',
-			description: 'Change colors based on a custom OSC message',
+			label:       'Change style based on a custom OSC message',
+			description: 'Change style based on a custom OSC message',
 			style:       {
 				color:	 self.rgb(255, 255, 255),
 				bgcolor: self.rgb(0, 255, 0)
@@ -257,15 +257,15 @@ module.exports = {
 		}
 
 		// Track Feedbacks
-		feedbacks['track_mute'] = self.createBooleanTrackFeedback('mute', 'Change color when a track is muted', 'Change color when a track is muted');
-		feedbacks['track_solo'] = self.createBooleanTrackFeedback('solo', 'Change color when a track is soloed', 'Change color when a track is soloed');
-		feedbacks['track_recarm'] = self.createBooleanTrackFeedback('recarm', 'Change color when a track is armed for recording', 'Change color when a track is armed for recording');
-		feedbacks['track_select'] = self.createBooleanTrackFeedback('select', 'Change color when a track is selected', 'Change color when a track is selected');
-		feedbacks['track_monitor'] = self.createBooleanTrackFeedback('monitor', 'Change color when monitoring is enabled for a track', 'Change color when monitoring is enabled for a track');
+		feedbacks['track_mute'] = self.createBooleanTrackFeedback('mute', 'Change style when a track is muted', 'Change style when a track is muted');
+		feedbacks['track_solo'] = self.createBooleanTrackFeedback('solo', 'Change style when a track is soloed', 'Change style when a track is soloed');
+		feedbacks['track_recarm'] = self.createBooleanTrackFeedback('recarm', 'Change style when a track is armed for recording', 'Change style when a track is armed for recording');
+		feedbacks['track_select'] = self.createBooleanTrackFeedback('select', 'Change style when a track is selected', 'Change style when a track is selected');
+		feedbacks['track_monitor'] = self.createBooleanTrackFeedback('monitor', 'Change style when monitoring is enabled for a track', 'Change style when monitoring is enabled for a track');
 
 		// Track FX Feedbacks
-		feedbacks['track_fx_bypass'] = self.createBooleanTrackFxFeedback('bypass', 'Change color when an FX is active', 'Change color when an FX is active');
-		feedbacks['track_fx_openui'] = self.createBooleanTrackFxFeedback('openui', 'Change color when an FX UI window is open', 'Change color when an FX UI window is open');
+		feedbacks['track_fx_bypass'] = self.createBooleanTrackFxFeedback('bypass', 'Change style when an FX is active', 'Change style when an FX is active');
+		feedbacks['track_fx_openui'] = self.createBooleanTrackFxFeedback('openui', 'Change style when an FX UI window is open', 'Change style when an FX UI window is open');
 		
 		return feedbacks;
 	},
