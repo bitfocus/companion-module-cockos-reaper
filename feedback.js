@@ -12,21 +12,14 @@ module.exports = {
 		var feedbacks = {}
 
 		feedbacks['playStatus']    = {
+			type:        'boolean',
 			label:       'Change colors based on Play/Pause status',
 			description: 'Change colors based on Play/Pause status',
+			style:       {
+				color:	 self.rgb(255, 255, 255),
+				bgcolor: self.rgb(0, 183, 0)
+			},
 			options:     [
-				{
-					type:    'colorpicker',
-					label:   'Foreground color',
-					id:      'fg',
-					default: self.rgb(255, 255, 255)
-				},
-				{
-					type:    'colorpicker',
-					label:   'Background color',
-					id:      'bg',
-					default: self.rgb(0, 183, 0)
-				},
 				{
 					type:    'dropdown',
 					label:   'Status',
@@ -40,26 +33,21 @@ module.exports = {
 			],
 			callback: (feedback, bank) => {
 				if (this.playStatus === feedback.options.playPause) {
-					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+					return true;
 				}
+
+				return false;
 			}
 		}
 		feedbacks['stopStatus']    = {
+			type:        'boolean',
 			label:       'Change colors based on Stop status',
 			description: 'Change colors based on Stop status',
+			style:       {
+				color:	 self.rgb(255, 255, 255),
+				bgcolor: self.rgb(76, 76, 76)
+			},
 			options:     [
-				{
-					type:    'colorpicker',
-					label:   'Foreground color',
-					id:      'fg',
-					default: self.rgb(255, 255, 255)
-				},
-				{
-					type:    'colorpicker',
-					label:   'Background color',
-					id:      'bg',
-					default: self.rgb(76, 76, 76)
-				},
 				{
 					type:    'dropdown',
 					label:   'Status',
@@ -72,26 +60,21 @@ module.exports = {
 				}
 			], callback: (feedback, bank) => {
 				if (this.stopStatus === feedback.options.stopPlay) {
-					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+					return true;
 				}
+
+				return false;
 			}
 		}
 		feedbacks['recordStatus']  = {
+			type:        'boolean',
 			label:       'Change colors based on Record status',
 			description: 'Change colors based on Record status',
+			style:       {
+				color:	 self.rgb(255, 255, 255),
+				bgcolor: self.rgb(183, 0, 0)
+			},
 			options:     [
-				{
-					type:    'colorpicker',
-					label:   'Foreground color',
-					id:      'fg',
-					default: self.rgb(255, 255, 255)
-				},
-				{
-					type:    'colorpicker',
-					label:   'Background color',
-					id:      'bg',
-					default: self.rgb(183, 0, 0)
-				},
 				{
 					type:    'dropdown',
 					label:   'Status',
@@ -104,26 +87,21 @@ module.exports = {
 				}
 			], callback: (feedback, bank) => {
 				if (this.recordStatus === feedback.options.recordOrNot) {
-					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+					return true;
 				}
+
+				return false;
 			}
 		}
 		feedbacks['rewindStatus']  = {
+			type:        'boolean',
 			label:       'Change colors based on Rewind status',
 			description: 'Change colors based on Rewind status',
+			style:       {
+				color:	 self.rgb(255, 255, 255),
+				bgcolor: self.rgb(249, 199, 0)
+			},
 			options:     [
-				{
-					type:    'colorpicker',
-					label:   'Foreground color',
-					id:      'fg',
-					default: self.rgb(255, 255, 255)
-				},
-				{
-					type:    'colorpicker',
-					label:   'Background color',
-					id:      'bg',
-					default: self.rgb(249, 199, 0)
-				},
 				{
 					type:    'dropdown',
 					label:   'Status',
@@ -136,26 +114,21 @@ module.exports = {
 				}
 			], callback: (feedback, bank) => {
 				if (this.rewindStatus === feedback.options.rewindOrNot) {
-					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+					return true;
 				}
+
+				return false;
 			}
 		}
 		feedbacks['forwardStatus'] = {
+			type:        'boolean',
 			label:       'Change colors based on Fast Forward status',
 			description: 'Change colors based on Fast Forward status',
+			style:       {
+				color:	 self.rgb(255, 255, 255),
+				bgcolor: self.rgb(249, 199, 0)
+			},
 			options:     [
-				{
-					type:    'colorpicker',
-					label:   'Foreground color',
-					id:      'fg',
-					default: self.rgb(255, 255, 255)
-				},
-				{
-					type:    'colorpicker',
-					label:   'Background color',
-					id:      'bg',
-					default: self.rgb(249, 199, 0)
-				},
 				{
 					type:    'dropdown',
 					label:   'Status',
@@ -168,27 +141,22 @@ module.exports = {
 				}
 			], callback: (feedback, bank) => {
 				if (this.forwardStatus === feedback.options.forwardOrNot) {
-					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+					return true;
 				}
+
+				return false;
 			}
 		}
 
 		feedbacks['repeatStatus'] = {
+			type:        'boolean',
 			label:       'Change colors based on Repeat status',
 			description: 'Change colors based on Repeat status',
+			style:       {
+				color:	 self.rgb(255, 255, 255),
+				bgcolor: self.rgb(153, 0, 153)
+			},
 			options:     [
-				{
-					type:    'colorpicker',
-					label:   'Foreground color',
-					id:      'fg',
-					default: self.rgb(255, 255, 255)
-				},
-				{
-					type:    'colorpicker',
-					label:   'Background color',
-					id:      'bg',
-					default: self.rgb(153, 0, 153)
-				},
 				{
 					type:    'dropdown',
 					label:   'Status',
@@ -201,27 +169,22 @@ module.exports = {
 				}
 			], callback: (feedback, bank) => {
 				if (this.repeatStatus === feedback.options.repeatOrNot) {
-					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+					return true;
 				}
+
+				return false;
 			}
 		}
 
 		feedbacks['clickStatus'] = {
+			type:        'boolean',
 			label:       'Change colors based on Click status',
 			description: 'Change colors based on Click status',
+			style:       {
+				color:	 self.rgb(255, 255, 255),
+				bgcolor: self.rgb(11, 138, 179)
+			},
 			options:     [
-				{
-					type:    'colorpicker',
-					label:   'Foreground color',
-					id:      'fg',
-					default: self.rgb(255, 255, 255)
-				},
-				{
-					type:    'colorpicker',
-					label:   'Background color',
-					id:      'bg',
-					default: self.rgb(11, 138, 179)
-				},
 				{
 					type:    'dropdown',
 					label:   'Status',
@@ -234,27 +197,22 @@ module.exports = {
 				}
 			], callback: (feedback, bank) => {
 				if (this.clickStatus === feedback.options.clickOrNot) {
-					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+					return true;
 				}
+
+				return false;
 			}
 		}
 
 		feedbacks['customMessage'] = {
+			type:        'boolean',
 			label:       'Change colors based on a custom OSC message',
 			description: 'Change colors based on a custom OSC message',
+			style:       {
+				color:	 self.rgb(255, 255, 255),
+				bgcolor: self.rgb(0, 255, 0)
+			},
 			options:     [
-				{
-					type:    'colorpicker',
-					label:   'Foreground color',
-					id:      'fg',
-					default: self.rgb(255, 255, 255)
-				},
-				{
-					type:    'colorpicker',
-					label:   'Background color',
-					id:      'bg',
-					default: self.rgb(0, 255, 0)
-				},
 				{
 					type:    'textinput',
 					label:   'Message',
@@ -291,8 +249,10 @@ module.exports = {
 					}
 				});
 				if (foundFeedback !== undefined) {
-					return {color: feedback.options.fg, bgcolor: feedback.options.bg}
+					return true;
 				}
+
+				return false;
 			}
 		}
 
