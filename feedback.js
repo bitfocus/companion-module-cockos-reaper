@@ -271,12 +271,17 @@ module.exports = {
 	},
 
 	// Condenses feedback options to an object containing id and default value alone for all feedback options
-	getFeedbackDefaults(feedbackType) {
+	getFeedbackDefaultOptions(feedbackType) {
 		var self = this
 		return self.getFeedbacks()[feedbackType].options.map(e => [e.id, e.default]).reduce(function (p, c) {
 			p[c[0]] = c[1];
 			return p;
 		}, {})
+	},
+
+	getFeedbackDefaultStyle(feedbackType) {
+		var self = this
+		return self.getFeedbacks()[feedbackType].style;
 	},
 
 	createBooleanTrackFeedback(propertyName, label, description)

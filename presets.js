@@ -31,7 +31,8 @@ module.exports = {
 				feedbacks: [
 					{
 						type:    'playStatus',
-						options: self.getFeedbackDefaults('playStatus')
+						options: self.getFeedbackDefaultOptions('playStatus'),
+						style: self.getFeedbackDefaultStyle('playStatus')
 					}
 				]
 			},
@@ -55,7 +56,8 @@ module.exports = {
 				feedbacks: [
 					{
 						type:    'stopStatus',
-						options: self.getFeedbackDefaults('stopStatus')
+						options: self.getFeedbackDefaultOptions('stopStatus'),
+						style: self.getFeedbackDefaultStyle('stopStatus')
 					}
 				]
 			},
@@ -79,7 +81,8 @@ module.exports = {
 				feedbacks: [
 					{
 						type:    'recordStatus',
-						options: self.getFeedbackDefaults('recordStatus')
+						options: self.getFeedbackDefaultOptions('recordStatus'),
+						style: self.getFeedbackDefaultStyle('recordStatus')
 					}
 				]
 			},
@@ -108,7 +111,8 @@ module.exports = {
 				feedbacks:       [
 					{
 						type:    'rewindStatus',
-						options: self.getFeedbackDefaults('rewindStatus')
+						options: self.getFeedbackDefaultOptions('rewindStatus'),
+						style: self.getFeedbackDefaultStyle('rewindStatus')
 					}
 				]
 			},
@@ -137,7 +141,8 @@ module.exports = {
 				feedbacks:       [
 					{
 						type:    'forwardStatus',
-						options: self.getFeedbackDefaults('forwardStatus')
+						options: self.getFeedbackDefaultOptions('forwardStatus'),
+						style: self.getFeedbackDefaultStyle('forwardStatus')
 					}
 				]
 			},
@@ -161,7 +166,8 @@ module.exports = {
 				feedbacks: [
 					{
 						type:    'repeatStatus',
-						options: self.getFeedbackDefaults('repeatStatus')
+						options: self.getFeedbackDefaultOptions('repeatStatus'),
+						style: self.getFeedbackDefaultStyle('repeatStatus')
 					}
 				]
 			},
@@ -185,7 +191,8 @@ module.exports = {
 				feedbacks: [
 					{
 						type:    'clickStatus',
-						options: self.getFeedbackDefaults('clickStatus')
+						options: self.getFeedbackDefaultOptions('clickStatus'),
+						style: self.getFeedbackDefaultStyle('clickStatus')
 					}
 				]
 			}
