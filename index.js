@@ -285,5 +285,20 @@ instance.prototype.handleBinaryTrackFxMessage = function(propertyName, trackNumb
 	self.checkFeedbacks('track_fx_' + propertyName);
 }
 
+instance.GetUpgradeScripts = function() {
+	return [
+		instance_skel.CreateConvertToBooleanFeedbackUpgradeScript({
+			'playStatus': true,
+			'stopStatus': true,
+			'recordStatus': true,
+			'rewindStatus': true,
+			'forwardStatus': true,
+			'repeatStatus': true,
+			'clickStatus': true,
+			'customMessage': true,
+		})
+	]
+}
+
 instance_skel.extendedBy(instance);
 exports = module.exports = instance;
