@@ -15,9 +15,16 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"license": "MIT",
-	"homepage": "https://www.reaper.fm",
+	"homepage": "https://github.com/bitfocus/companion-module-cockos-reaper#readme",
 	"author": "Oliver Herman <oliver@monoxane.com>",
 	"contributors": [
 		"Oded Davidov <davidovoded@gmail.com>"
-	]
+	],
+	"bugs": {
+		"url": "https://github.com/bitfocus/companion-module-cockos-reaper/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bitfocus/companion-module-cockos-reaper.git"
+	}
 }
