@@ -94,7 +94,7 @@ instance.prototype.actions = function (system) {
 	var self    = this;
 	var actions = self.getActions();
 
-	self.system.emit('instance_actions', self.id, actions);
+	self.setActions(actions);
 }
 
 instance.prototype.action = function (action) {
@@ -103,7 +103,7 @@ instance.prototype.action = function (action) {
 	[cmd, args] = self.getCommand(action)
 	if (cmd !== undefined) {
 		debug('sending', cmd, args, "to", self.config.host);
-		self.system.emit('osc_send', self.config.host, self.config.port, cmd, args);
+		self.oscSend(self.config.host, self.config.port, cmd, args);
 	}
 };
 
