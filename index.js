@@ -145,6 +145,8 @@ instance.prototype.init_osc = function () {
 		}
 	});
 
+	self.messageHandlers = self.getMessageHandlers();
+
 	self.listener.on("message", function (message) {
 			if (self.customMessageStatus === undefined) {
 				self.customMessageStatus = {}
@@ -164,117 +166,12 @@ instance.prototype.init_osc = function () {
 				}
 			});
 
-			if (message.address === '/play') {
-				if (message.args.length >= 0) {
-					var togglePlayStatus = message.args[0].value;
-					if (typeof togglePlayStatus === "number") {
-						if (togglePlayStatus === 1) {
-							self.playStatus = "Playing";
-						} else {
-							self.playStatus = "Paused";
-						}
-						self.setVariable('playStatus', self.playStatus);
-						self.checkFeedbacks('playStatus');
-						debug("togglePlayStatus is", togglePlayStatus)
-						debug("playStatus is", self.playStatus)
-					}
-				}
-			}
-			if (message.address === '/stop') {
-				if (message.args.length >= 0) {
-					var toggleStopStatus = message.args[0].value;
-					if (typeof toggleStopStatus === "number") {
-						if (toggleStopStatus === 1) {
-							self.stopStatus = "Stopped";
-						} else {
-							self.stopStatus = "Playing";
-						}
-						self.setVariable('stopStatus', self.stopStatus);
-						self.checkFeedbacks('stopStatus');
-						debug("toggleStopStatus is", toggleStopStatus)
-						debug("stopStatus is", self.stopStatus)
-					}
-				}
-			}
-			if (message.address === '/record') {
-				if (message.args.length >= 0) {
-					var toggleRecordStatus = message.args[0].value;
-					if (typeof toggleRecordStatus === "number") {
-						if (toggleRecordStatus === 1) {
-							self.recordStatus = "Recording";
-						} else {
-							self.recordStatus = "Not Recording";
-						}
-						self.setVariable('recordStatus', self.recordStatus);
-						self.checkFeedbacks('recordStatus');
-						debug("toggleRecordStatus is", toggleRecordStatus)
-						debug("recordStatus is", self.recordStatus)
-					}
-				}
-			}
-			if (message.address === '/rewind') {
-				if (message.args.length >= 0) {
-					var toggleRewindStatus = message.args[0].value;
-					if (typeof toggleRewindStatus === "number") {
-						if (toggleRewindStatus === 1) {
-							self.rewindStatus = "Rewinding";
-						} else {
-							self.rewindStatus = "Not Rewinding";
-						}
-						self.setVariable('rewindStatus', self.rewindStatus);
-						self.checkFeedbacks('rewindStatus');
-						debug("toggleRewindStatus is", toggleRewindStatus)
-						debug("rewindStatus is", self.rewindStatus)
-					}
-				}
-			}
-			if (message.address === '/forward') {
-				if (message.args.length >= 0) {
-					var toggleForwardStatus = message.args[0].value;
-					if (typeof toggleForwardStatus === "number") {
-						if (toggleForwardStatus === 1) {
-							self.forwardStatus = "Forwarding";
-						} else {
-							self.forwardStatus = "Not Forwarding";
-						}
-						self.setVariable('forwardStatus', self.forwardStatus);
-						self.checkFeedbacks('forwardStatus');
-						debug("toggleForwardStatus is", toggleForwardStatus)
-						debug("forwardStatus is", self.forwardStatus)
-					}
-				}
-			}
-			if (message.address === '/click') {
-				if (message.args.length >= 0) {
-					var toggleClickStatus = message.args[0].value;
-					if (typeof toggleClickStatus === "number") {
-						if (toggleClickStatus === 1) {
-							self.clickStatus = "Active";
-						} else {
-							self.clickStatus = "Inactive";
-						}
-						self.setVariable('clickStatus', self.clickStatus);
-						self.checkFeedbacks('clickStatus');
-						debug("toggleClickStatus is", toggleClickStatus)
-						debug("clickStatus is", self.clickStatus)
-					}
-				}
-			}
-			if (message.address === '/repeat') {
-				if (message.args.length >= 0) {
-					var toggleRepeatStatus = message.args[0].value;
-					if (typeof toggleRepeatStatus === "number") {
-						if (toggleRepeatStatus === 1) {
-							self.repeatStatus = "Active";
-						} else {
-							self.repeatStatus = "Inactive";
-						}
-						self.setVariable('repeatStatus', self.repeatStatus);
-						self.checkFeedbacks('repeatStatus');
-						debug("toggleRepeatStatus is", toggleRepeatStatus)
-						debug("repeatStatus is", self.repeatStatus)
-					}
-				}
+			var addressParts = message.address.split('/');
+			var messageType = addressParts[1];
+
+			if (self.messageHandlers[messageType] !== undefined)
+			{
+				self.messageHandlers[messageType](addressParts, message.args);
 			}
 		}
 	)
@@ -290,6 +187,129 @@ instance.prototype.init_feedbacks = function () {
 	var self      = this
 	var feedbacks = self.getFeedbacks();
 	self.setFeedbackDefinitions(feedbacks)
+}
+
+instance.prototype.getMessageHandlers = function()
+{
+	var self = this;
+
+	var trackHandlers = self.getTrackMessageHandlers();
+
+	return {
+		play:    (addressParts, args) => self.handleBinaryMessage('playStatus', args, self.valueConverters.play),
+		stop:    (addressParts, args) => self.handleBinaryMessage('stopStatus', args, self.valueConverters.stop),
+		record:  (addressParts, args) => self.handleBinaryMessage('recordStatus', args, self.valueConverters.record),
+		rewind:  (addressParts, args) => self.handleBinaryMessage('rewindStatus', args, self.valueConverters.rewind),
+		forward: (addressParts, args) => self.handleBinaryMessage('forwardStatus', args, self.valueConverters.forward),
+		click:   (addressParts, args) => self.handleBinaryMessage('clickStatus', args, self.valueConverters.click),
+		repeat:  (addressParts, args) => self.handleBinaryMessage('repeatStatus', args, self.valueConverters.repeat),
+		track:   (addressParts, args) => self.handleTrackMessage(addressParts, args, trackHandlers)
+	}
+}
+
+instance.prototype.getTrackMessageHandlers = function() {
+	var self = this;
+
+	var trackFxHandlers = self.getTrackFxMessageHandlers();
+
+	return {
+		mute:    (trackNumber, addressParts, args) => self.handleBinaryTrackMessage('mute', trackNumber, addressParts, args, self.valueConverters.trackMute),
+		solo:    (trackNumber, addressParts, args) => self.handleBinaryTrackMessage('solo', trackNumber, addressParts, args, self.valueConverters.trackSolo),
+		recarm:  (trackNumber, addressParts, args) => self.handleBinaryTrackMessage('recarm', trackNumber, addressParts, args, self.valueConverters.trackRecArm),
+		select:  (trackNumber, addressParts, args) => self.handleBinaryTrackMessage('select', trackNumber, addressParts, args, self.valueConverters.trackSelect),
+		name:    (trackNumber, addressParts, args) => {
+			var self = this;
+
+			self.setTrackProperty(trackNumber, 'name', args[0].value);
+		},
+		monitor: (trackNumber, addressParts, args) => self.handleBinaryTrackMessage('monitor', trackNumber, addressParts, args, self.valueConverters.trackMonitor),
+		fx:      (trackNumber, addressParts, args) => self.handleTrackFxMessage(trackNumber, addressParts[4], addressParts, args, trackFxHandlers)
+	};
+}
+
+instance.prototype.getTrackFxMessageHandlers = function() {
+	var self = this;
+
+	return {
+		bypass: (trackNumber, fxNumber, addressParts, args) => self.handleBinaryTrackFxMessage('bypass', trackNumber, fxNumber, args, self.valueConverters.trackFxBypass),
+		name:   (trackNumber, fxNumber, addressParts, args) => self.setTrackFxProperty(trackNumber, fxNumber, 'name', args[0].value),
+		openui: (trackNumber, fxNumber, addressParts, args) => self.handleBinaryTrackFxMessage('openui', trackNumber, fxNumber, args, self.valueConverters.trackFxOpenUi)
+	}
+}
+
+instance.prototype.handleBinaryMessage = function(variableName, args, valueConverter) {
+    var self = this;
+
+	if (args.length >= 0) {
+		var value = args[0].value;
+		if (typeof value === "number") {
+			var textValue = valueConverter !== undefined ? valueConverter(value) : value.toString();
+
+			self[variableName] = textValue
+			self.setVariable(variableName, textValue);
+			self.checkFeedbacks(variableName);
+			self.debug("message " + variableName + " value is", value)
+			self.debug(variableName + " is", self[variableName])
+		}
+	}
+}
+
+// TODO: Handle messages regarding selected track  (has no track number)
+// /track/[trackNumber]/[messageType]
+instance.prototype.handleTrackMessage = function (addressParts, args, handlers) {
+	var trackNumber = parseInt(addressParts[2]);
+	var messageType = addressParts[3];
+
+	if (handlers[messageType] !== undefined)
+	{
+		handlers[messageType](trackNumber, addressParts, args);
+	}
+}
+
+instance.prototype.handleBinaryTrackMessage = function(propertyName, trackNumber, addressParts, args, valueConverter) {
+	var self = this;
+
+	// Toggles can be ignored
+	if (addressParts[4] === 'toggle')
+	{
+		return;
+	}
+
+	self.setTrackProperty(trackNumber, propertyName, args[0].value === 1, valueConverter);
+	self.checkFeedbacks('track_' + propertyName);
+}
+
+// /track/[trackNumber]/fx/[fxNumber]/[messageType]
+instance.prototype.handleTrackFxMessage = function(trackNumber, fxNumber, addressParts, args, handlers){
+	var messageType = addressParts[5];
+
+	if (handlers[messageType] !== undefined)
+	{
+		handlers[messageType](trackNumber, fxNumber, addressParts, args);
+	}
+}
+
+instance.prototype.handleBinaryTrackFxMessage = function(propertyName, trackNumber, fxNumber, args, valueConverter)
+{
+	var self = this;
+	
+	self.setTrackFxProperty(trackNumber, fxNumber, propertyName, args[0].value === 1, valueConverter);
+	self.checkFeedbacks('track_fx_' + propertyName);
+}
+
+instance.GetUpgradeScripts = function() {
+	return [
+		instance_skel.CreateConvertToBooleanFeedbackUpgradeScript({
+			'playStatus': true,
+			'stopStatus': true,
+			'recordStatus': true,
+			'rewindStatus': true,
+			'forwardStatus': true,
+			'repeatStatus': true,
+			'clickStatus': true,
+			'customMessage': true,
+		})
+	]
 }
 
 instance_skel.extendedBy(instance);
