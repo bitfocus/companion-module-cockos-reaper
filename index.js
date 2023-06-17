@@ -38,6 +38,11 @@ instance.prototype.init = function () {
 	self.init_osc();
 	debug = self.debug;
 	log   = self.log;
+
+	if (self.config.refreshOnInit) {
+		debug("Sending control surface refresh action to " + self.config.host);
+		self.system.emit('osc_send', self.config.host, self.config.port, '/action/41743');
+	}
 };
 
 // Return config fields for web config
@@ -74,6 +79,13 @@ instance.prototype.config_fields = function () {
 			width:   3,
 			tooltip: 'The port REAPER is sending OSC to',
 			regex:   self.REGEX_SIGNED_NUMBER
+		},
+		{
+			type:    'checkbox',
+			id:      'refreshOnInit',
+			label:   'Refresh On Start',
+			tooltip: 'If enabled, a "Control surface: Refresh all surfaces" command will be sent to reaper on start.',
+			default: false,
 		}
 	]
 };
