@@ -1,0 +1,30 @@
+{
+	"id": "cockos-reaper",
+	"name": "cockos-reaper",
+	"shortname": "reaper",
+	"description": "Cockos REAPER module for Companion",
+	"version": "2.0.0",
+	"license": "MIT",
+	"repository": "git+https://github.com/bitfocus/companion-module-cockos-reaper.git",
+	"bugs": "https://github.com/bitfocus/companion-module-cockos-reaper/issues",
+	"maintainers": [
+		{
+			"name": "Oliver Herman",
+			"email": "oliver@monoxane.com"
+		},
+		{
+			"name": "Oded Davidov",
+			"email": "davidovoded@gmail.com"
+		}
+	],
+	"legacyIds": [],
+	"runtime": {
+		"type": "node18",
+		"api": "nodejs-ipc",
+		"apiVersion": "0.0.0",
+		"entrypoint": "../dist/index.js"
+	},
+	"manufacturer": "Cockos",
+	"products": ["REAPER"],
+	"keywords": ["Audio", "Recording"]
+}

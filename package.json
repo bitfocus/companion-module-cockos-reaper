@@ -1,27 +1,39 @@
 {
 	"name": "cockos-reaper",
-	"version": "1.1.2",
-	"api_version": "1.0.0",
-	"keywords": [
-		"Audio",
-		"Recording"
-	],
-	"manufacturer": "Cockos",
-	"product": "REAPER",
-	"shortname": "reaper",
-	"description": "Cockos REAPER module for Companion",
+	"version": "2.0.0",
 	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"prepare": "husky install",
+		"build": "rimraf dist && yarn build:main",
+		"build:main": "tsc -p tsconfig.build.json",
+		"dev": "tsc -p tsconfig.build.json --watch",
+		"lint:raw": "eslint --ext .ts --ext .js --ignore-pattern dist --ignore-pattern pkg --ignore-pattern old",
+		"lint": "yarn lint:raw ."
 	},
 	"license": "MIT",
-	"homepage": "https://github.com/bitfocus/companion-module-cockos-reaper#readme",
-	"author": "Oliver Herman <oliver@monoxane.com>",
-	"contributors": [
-		"Oded Davidov <davidovoded@gmail.com>"
-	],
-	"bugs": {
-		"url": "https://github.com/bitfocus/companion-module-cockos-reaper/issues"
+	"prettier": "@companion-module/tools/.prettierrc.json",
+	"lint-staged": {
+		"*.{css,json,md,scss}": [
+			"prettier --write"
+		],
+		"*.{ts,tsx,js,jsx}": [
+			"yarn lint:raw --fix"
+		]
+	},
+	"dependencies": {
+		"@companion-module/base": "~1.7.0",
+		"reaper-osc": "0.4.0"
+	},
+	"devDependencies": {
+		"@companion-module/tools": "^1.5.0",
+		"@types/node": "^18.11.9",
+		"husky": "^8.0.1",
+		"lint-staged": "^13.0.3",
+		"rimraf": "^3.0.2",
+		"typescript": "~4.9"
+	},
+	"engines": {
+		"node": "^18.12"
 	},
 	"repository": {
 		"type": "git",
