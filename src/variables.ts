@@ -69,7 +69,7 @@ function LegacyVariableDefinitions(): ReaperPropertyVariableDefinition[] {
 				const minutes = Math.floor((value / 60) % 60)
 				const seconds = value % 60
 				// build up time string in h:mm:ss.mmm format with optional hours section
-				return `${hours > 0 ? hours + ':' + minutes.toString().padStart(2, '0') : minutes}:${seconds.toFixed(3)}`
+				return `${hours > 0 ? hours + ':' + minutes.toString().padStart(2, '0') : minutes}:${seconds.toFixed(3).padStart(6, '0')}`
 			},
 		},
 	]
