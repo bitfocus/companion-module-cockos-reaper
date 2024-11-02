@@ -1,7 +1,7 @@
 {
 	"name": "cockos-reaper",
-	"version": "2.0.0",
-	"main": "index.js",
+	"version": "2.1.1",
+	"main": "dist/index.js",
 	"scripts": {
 		"prepare": "husky install",
 		"build": "rimraf dist && yarn build:main",

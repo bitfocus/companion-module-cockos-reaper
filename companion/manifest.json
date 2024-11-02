@@ -3,7 +3,7 @@
 	"name": "cockos-reaper",
 	"shortname": "reaper",
 	"description": "Cockos REAPER module for Companion",
-	"version": "2.0.0",
+	"version": "0.0.0",
 	"license": "MIT",
 	"repository": "git+https://github.com/bitfocus/companion-module-cockos-reaper.git",
 	"bugs": "https://github.com/bitfocus/companion-module-cockos-reaper/issues",
