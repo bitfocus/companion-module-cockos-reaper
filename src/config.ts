@@ -5,6 +5,8 @@ export interface ModuleConfig {
 	port: number
 	feedbackPort: number
 	refreshOnInit: boolean
+	numberOfTracks: number
+	numberOfFx: number
 }
 
 export function GetConfigFields(): SomeCompanionConfigField[] {
@@ -51,6 +53,26 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 			width: 3,
 			tooltip: 'If enabled, a "Control surface: Refresh all surfaces" command will be sent to reaper on start.',
 			default: true,
+		},
+		{
+			type: 'number',
+			id: 'numberOfTracks',
+			label: 'Number of Tracks',
+			width: 3,
+			tooltip: 'Sets the number of tracks per bank',
+			min: 1,
+			max: 512,
+			default: 8,
+		},
+		{
+			type: 'number',
+			id: 'numberOfFx',
+			label: 'Number of FX',
+			width: 3,
+			tooltip: 'Sets the number of FX per track',
+			min: 1,
+			max: 512,
+			default: 8,
 		},
 	]
 }
