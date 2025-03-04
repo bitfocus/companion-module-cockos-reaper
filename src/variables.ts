@@ -13,15 +13,15 @@ export type ReaperPropertyVariableDefinition = {
 	valueConverter?: (value: any) => any
 } & CompanionVariableDefinition
 
-export function GetVariableDefinitions(): ReaperPropertyVariableDefinition[] {
+export function GetVariableDefinitions(numberOfTracks: number, numberOfFx: number): ReaperPropertyVariableDefinition[] {
 	const variables: ReaperPropertyVariableDefinition[] = []
 
-	variables.push(...LegacyVariableDefinitions())
+	variables.push(...LegacyVariableDefinitions(numberOfTracks, numberOfFx))
 
 	return variables
 }
 
-function LegacyVariableDefinitions(): ReaperPropertyVariableDefinition[] {
+function LegacyVariableDefinitions(numberOfTracks: number, numberOfFx: number): ReaperPropertyVariableDefinition[] {
 	const variables: ReaperPropertyVariableDefinition[] = [
 		{
 			...LegacyTransportVariable('playStatus', 'Play Status', 'isPlaying'),
@@ -69,13 +69,15 @@ function LegacyVariableDefinitions(): ReaperPropertyVariableDefinition[] {
 				const minutes = Math.floor((value / 60) % 60)
 				const seconds = value % 60
 				// build up time string in h:mm:ss.mmm format with optional hours section
-				return `${hours > 0 ? hours + ':' + minutes.toString().padStart(2, '0') : minutes}:${seconds.toFixed(3).padStart(6, '0')}`
+				return `${hours > 0 ? hours + ':' + minutes.toString().padStart(2, '0') : minutes}:${seconds
+					.toFixed(3)
+					.padStart(6, '0')}`
 			},
 		},
 	]
 
-	for (let i = 0; i < 8; i++) {
-		const trackVariables = LegacyTrackVariables(i)
+	for (let i = 0; i < numberOfTracks; i++) {
+		const trackVariables = LegacyTrackVariables(i, numberOfFx)
 
 		variables.push(...trackVariables)
 	}
@@ -83,7 +85,7 @@ function LegacyVariableDefinitions(): ReaperPropertyVariableDefinition[] {
 	return variables
 }
 
-function LegacyTrackVariables(trackIndex: number): ReaperPropertyVariableDefinition[] {
+function LegacyTrackVariables(trackIndex: number, numberOfFx: number): ReaperPropertyVariableDefinition[] {
 	const variables: ReaperPropertyVariableDefinition[] = [
 		{
 			...LegacyTrackVariable(trackIndex, 'Mute', 'Muted', 'isMuted'),
@@ -110,7 +112,7 @@ function LegacyTrackVariables(trackIndex: number): ReaperPropertyVariableDefinit
 		},
 	]
 
-	for (let i = 0; i < 8; i++) {
+	for (let i = 0; i < numberOfFx; i++) {
 		const fxVariables = LegacyTrackFxVariables(trackIndex, i)
 
 		variables.push(...fxVariables)

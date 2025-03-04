@@ -72,7 +72,7 @@ class ControllerInstance extends InstanceBase<ModuleConfig> {
 
 		this._reaper = new Reaper(reaperConfig)
 
-		this.bindVariables()
+		this.bindVariables(config.numberOfTracks, config.numberOfFx)
 
 		this.log('debug', `Reaper Configuration: ${JSON.stringify(reaperConfig, null, 2)}`)
 
@@ -138,8 +138,8 @@ class ControllerInstance extends InstanceBase<ModuleConfig> {
 		}
 	}
 
-	private bindVariables(): void {
-		const variables = GetVariableDefinitions()
+	private bindVariables(numberOfTracks: number, numberOfFx: number): void {
+		const variables = GetVariableDefinitions(numberOfTracks, numberOfFx)
 
 		const unsubscribes: Unsubscribe[] = []
 
