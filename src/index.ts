@@ -12,7 +12,7 @@ import { CustomMessageFeedbacks, FeedbackBindings, FeedbackId, GetFeedbacksList 
 import { GetActionsList } from './actions'
 import { LogLevel, OscMessage, Reaper, ReaperConfiguration } from 'reaper-osc'
 import { GetVariableDefinitions, ReaperProperty } from './variables'
-import { CreateUseInvertForFeedbacksUpgradeScript } from './upgrades'
+import { CreateNumberOfTracksDefaultsUpgradeScript, CreateUseInvertForFeedbacksUpgradeScript } from './upgrades'
 
 class ControllerInstance extends InstanceBase<ModuleConfig> {
 	private _reaper: Reaper | null
@@ -205,4 +205,5 @@ runEntrypoint(ControllerInstance, [
 		[FeedbackId.RepeatStatus]: { optionId: 'repeatOrNot', trueValue: 'Active' },
 		[FeedbackId.ClickStatus]: { optionId: 'clickOrNot', trueValue: 'Active' },
 	}),
+	CreateNumberOfTracksDefaultsUpgradeScript(),
 ])
