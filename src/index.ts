@@ -12,7 +12,7 @@ import { CustomMessageFeedbacks, FeedbackBindings, FeedbackId, GetFeedbacksList 
 import { GetActionsList } from './actions'
 import { LogLevel, OscMessage, Reaper, ReaperConfiguration } from 'reaper-osc'
 import { GetVariableDefinitions, ReaperProperty } from './variables'
-import { CreateUseInvertForFeedbacksUpgradeScript } from './upgrades'
+import { CreateNumberOfTracksDefaultsUpgradeScript, CreateUseInvertForFeedbacksUpgradeScript } from './upgrades'
 
 class ControllerInstance extends InstanceBase<ModuleConfig> {
 	private _reaper: Reaper | null
@@ -62,13 +62,17 @@ class ControllerInstance extends InstanceBase<ModuleConfig> {
 		reaperConfig.remoteAddress = config.host
 		reaperConfig.remotePort = config.port
 
+		// Device Setup
+		reaperConfig.numberOfTracks = config.numberOfTracks
+		reaperConfig.numberOfFx = config.numberOfFx
+
 		reaperConfig.afterMessageReceived = (message, handled) => {
 			this.handleCustomMessages(message, handled)
 		}
 
 		this._reaper = new Reaper(reaperConfig)
 
-		this.bindVariables()
+		this.bindVariables(config.numberOfTracks, config.numberOfFx)
 
 		this.log('debug', `Reaper Configuration: ${JSON.stringify(reaperConfig, null, 2)}`)
 
@@ -134,8 +138,8 @@ class ControllerInstance extends InstanceBase<ModuleConfig> {
 		}
 	}
 
-	private bindVariables(): void {
-		const variables = GetVariableDefinitions()
+	private bindVariables(numberOfTracks: number, numberOfFx: number): void {
+		const variables = GetVariableDefinitions(numberOfTracks, numberOfFx)
 
 		const unsubscribes: Unsubscribe[] = []
 
@@ -201,4 +205,5 @@ runEntrypoint(ControllerInstance, [
 		[FeedbackId.RepeatStatus]: { optionId: 'repeatOrNot', trueValue: 'Active' },
 		[FeedbackId.ClickStatus]: { optionId: 'clickOrNot', trueValue: 'Active' },
 	}),
+	CreateNumberOfTracksDefaultsUpgradeScript(),
 ])

@@ -35,6 +35,22 @@ export function CreateUseInvertForFeedbacksUpgradeScript(
 	}
 }
 
+export function CreateNumberOfTracksDefaultsUpgradeScript(): CompanionStaticUpgradeScript<ModuleConfig> {
+	return (_, props) => {
+		const { config } = props
+		if (config) {
+			config.numberOfTracks ??= 8
+			config.numberOfFx ??= 8
+		}
+
+		return {
+			updatedConfig: config,
+			updatedActions: [],
+			updatedFeedbacks: [],
+		}
+	}
+}
+
 export type BooleanFeedbackOption = {
 	optionId: string
 	trueValue: string
