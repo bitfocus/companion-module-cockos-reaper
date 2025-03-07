@@ -49,7 +49,7 @@ class ControllerInstance extends InstanceBase<ModuleConfig> {
 		if (this._reaper !== null) {
 			await this.disconnectOsc()
 			this.unbindVariables()
-			this.unbindFeedbacks()
+			this.unsubscribeFeedbacks()
 		}
 
 		const reaperConfig = new ReaperConfiguration()
@@ -73,6 +73,7 @@ class ControllerInstance extends InstanceBase<ModuleConfig> {
 		this._reaper = new Reaper(reaperConfig)
 
 		this.bindVariables(config.numberOfTracks, config.numberOfFx)
+		this.subscribeFeedbacks()
 
 		this.log('debug', `Reaper Configuration: ${JSON.stringify(reaperConfig, null, 2)}`)
 
@@ -91,8 +92,7 @@ class ControllerInstance extends InstanceBase<ModuleConfig> {
 	public async destroy(): Promise<void> {
 		await this.disconnectOsc()
 		this.unbindVariables()
-		this.unbindFeedbacks()
-		this.clearCustomFeedbacks()
+		this.unsubscribeFeedbacks()
 	}
 
 	private handleCustomMessages(message: OscMessage, _: boolean) {
@@ -122,20 +122,6 @@ class ControllerInstance extends InstanceBase<ModuleConfig> {
 		await this._reaper.stop()
 		this.updateStatus(InstanceStatus.Disconnected)
 		this.log('info', 'Stopped listening to Reaper')
-	}
-
-	private clearCustomFeedbacks(): void {
-		this._customMessageFeedbacks = {}
-	}
-
-	private unbindFeedbacks(): void {
-		const bindings = this._feedbackBindings
-
-		this._feedbackBindings = {}
-
-		for (const entry of Object.entries(bindings)) {
-			entry[1]()
-		}
 	}
 
 	private bindVariables(numberOfTracks: number, numberOfFx: number): void {
