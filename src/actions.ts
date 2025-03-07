@@ -3,6 +3,7 @@ import {
 	CompanionActionDefinitions,
 	CompanionActionEvent,
 	CompanionInputFieldNumber,
+	SomeCompanionActionInputField,
 } from '@companion-module/base'
 import { FloatMessage, OscMessage, Reaper, RecordMonitoringMode, StringMessage, Track, TrackFx } from 'reaper-osc'
 import { ModuleContext } from './index'
@@ -38,6 +39,8 @@ export enum ActionId {
 	TrackDeselect = 'track_deselect',
 	TrackMonitorEnable = 'track_monitor_enable',
 	TrackMonitorDisable = 'track_monitor_disable',
+	TrackSetVolumeDb = 'track_set_volume_db',
+	TrackSetVolumeFaderPosition = 'track_set_volume_fader_position',
 
 	// Track FX
 	TrackFxBypass = 'track_fx_bypass',
@@ -134,6 +137,8 @@ export function GetActionsList(getContext: () => ActionContext): CompanionAction
 		[ActionId.TrackMonitorDisable]: TrackAction('Monitoring Disable', getContext, (track) =>
 			track.setMonitoringMode(RecordMonitoringMode.OFF)
 		),
+		[ActionId.TrackSetVolumeDb]: TrackSetVolumeDbAction(getContext),
+		[ActionId.TrackSetVolumeFaderPosition]: TrackSetVolumeFaderPositionAction(getContext),
 
 		// Track Fx actions
 		[ActionId.TrackFxBypass]: TrackFxAction('Bypass', getContext, (fx) => fx.bypass()),
@@ -292,11 +297,12 @@ function FxOption(): CompanionInputFieldNumber {
 function TrackAction(
 	name: string,
 	getContext: () => ActionContext,
-	action: (track: Track, evt: CompanionActionEvent) => void
+	action: (track: Track, evt: CompanionActionEvent) => void,
+	additionalOptions: SomeCompanionActionInputField[] = []
 ): CompanionActionDefinition {
 	return {
 		name: `Track ${name}`,
-		options: [TrackOption()],
+		options: [TrackOption(), ...additionalOptions],
 		callback: (evt) => {
 			const context = getContext()
 
@@ -333,4 +339,44 @@ function TrackFxAction(
 			action(fx)
 		},
 	}
+}
+
+function TrackSetVolumeDbAction(getContext: () => ActionContext): CompanionActionDefinition {
+	const volumeOption: CompanionInputFieldNumber = {
+		type: 'number',
+		label: 'Volume (dB)',
+		id: 'volumeDb',
+		default: 0,
+		min: -100,
+		max: 12,
+	}
+
+	return TrackAction(
+		'Set Volume (dB)',
+		getContext,
+		(track, evt) => {
+			track.setVolumeDb(Number(evt.options.volumeDb))
+		},
+		[volumeOption]
+	)
+}
+
+function TrackSetVolumeFaderPositionAction(getContext: () => ActionContext): CompanionActionDefinition {
+	const volumeOption: CompanionInputFieldNumber = {
+		type: 'number',
+		label: 'Volume (fader position)',
+		id: 'volumeFaderPos',
+		default: 0,
+		min: 0,
+		max: 1,
+	}
+
+	return TrackAction(
+		'Set Volume (fader position)',
+		getContext,
+		(track, evt) => {
+			track.setVolumeFaderPosition(Number(evt.options.volumeFaderPos))
+		},
+		[volumeOption]
+	)
 }
