@@ -489,8 +489,8 @@ function TrackVolumeFadeAction(getContext: () => ActionContext): CompanionAction
 }
 
 function FadeVolume(getContext: () => ActionContext, track: Track, duration: number, targetVolumeDb: number) {
-	// Audio fades are complicated due to the logarithmic nature of dB, and I am bad at math, so I have kept this
-	// simple with a linear fade.
+	// Audio fades are complicated due to the logarithmic nature of dB, and I am bad at math, so I have kept
+	// this as simple as possible
 	const stepDuration = 50
 	const steps = Math.ceil(duration / stepDuration)
 	const initialVolume = track.volumeDb
