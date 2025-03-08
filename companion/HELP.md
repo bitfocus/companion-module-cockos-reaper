@@ -49,6 +49,10 @@ This module connects to the Cockos Reaper software.
 - Track Monitoring Disable
 - Track Set Volume (dB)
 - Track Set Volume (fader position)
+- Track Volume Up
+- Track Volume Down
+- Track Set Pan
+- Track Set Pan 2
 - Track FX Bypass
 - Track FX Open UI
 - Track FX Unbypass
@@ -71,8 +75,6 @@ Feedbacks are available to reflect the state of the following actions:
 - Track Arm
 - Track Monitoring
 - Track Selected
-- Track Volume (dB)
-- Track Volume (fader position)
 - Track FX Active
 - Track FX UI Open
 - Custom feedback based on an OSC message and its value

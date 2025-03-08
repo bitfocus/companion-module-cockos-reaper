@@ -109,6 +109,14 @@ function TrackVariables(trackIndex: number, numberOfFx: number): ReaperPropertyV
 		{
 			...TrackVariable(trackIndex, 'VolumeFaderPos', 'Volume (fader position)', 'volumeFaderPosition'),
 		},
+		{
+			...TrackVariable(trackIndex, 'Pan', 'Pan', 'pan'),
+			valueConverter: PanValueConverter,
+		},
+		{
+			...TrackVariable(trackIndex, 'Pan2', 'Pan 2', 'pan2'),
+			valueConverter: PanValueConverter,
+		},
 	]
 
 	for (let i = 0; i < numberOfFx; i++) {
@@ -191,4 +199,26 @@ function NotifyPropertySelector<T extends INotifyPropertyChanged>(
 		property: propertyName,
 		valueSelector: (item: T) => item[propertyName],
 	})
+}
+
+function PanValueConverter(value: any): string {
+	let pan = Math.fround(Number(value))
+
+	// TODO: Add PanStr to reaper-osc and use that instead - these values don't always line up perfectly with
+	// what's shown in Reaper due to differences in rounding
+	if (pan > 0.5) {
+		pan = pan - 0.5
+
+		const pct = Math.round(pan * 2 * 100)
+
+		return `${pct}%R`
+	} else if (pan < 0.5) {
+		pan = 0.5 - pan
+
+		const pct = Math.round(pan * 2 * 100)
+
+		return `${pct}%L`
+	} else {
+		return 'C'
+	}
 }

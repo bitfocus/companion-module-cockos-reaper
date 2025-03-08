@@ -96,6 +96,8 @@ class ControllerInstance extends InstanceBase<ModuleConfig> {
 	}
 
 	private handleCustomMessages(message: OscMessage, _: boolean) {
+		this.log('debug', `OSC Message received: ${JSON.stringify(message)}`)
+
 		Object.values(this._customMessageFeedbacks).forEach((feedback) => {
 			feedback.handler.handle(message)
 		})
