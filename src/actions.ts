@@ -43,6 +43,7 @@ export enum ActionId {
 	TrackSetVolumeFaderPosition = 'track_set_volume_fader_position',
 	TrackVolumeUp = 'track_volume_up',
 	TrackVolumeDown = 'track_volume_down',
+	TrackVolumeFade = 'track_volume_fade',
 	TrackSetPan = 'track_set_pan',
 	TrackSetPan2 = 'track_set_pan2',
 
@@ -145,6 +146,7 @@ export function GetActionsList(getContext: () => ActionContext): CompanionAction
 		[ActionId.TrackSetVolumeFaderPosition]: TrackSetVolumeFaderPositionAction(getContext),
 		[ActionId.TrackVolumeUp]: TrackVolumeRelativeAction(getContext, 'up'),
 		[ActionId.TrackVolumeDown]: TrackVolumeRelativeAction(getContext, 'down'),
+		[ActionId.TrackVolumeFade]: TrackVolumeFadeAction(getContext),
 		[ActionId.TrackSetPan]: TrackSetPanAction(getContext),
 		[ActionId.TrackSetPan2]: TrackSetPan2Action(getContext),
 
@@ -457,4 +459,75 @@ function TrackSetPan2Action(getContext: () => ActionContext): CompanionActionDef
 		},
 		[panOption]
 	)
+}
+
+function TrackVolumeFadeAction(getContext: () => ActionContext): CompanionActionDefinition {
+	const timeOption: CompanionInputFieldNumber = {
+		type: 'number',
+		label: 'Fade Duration (ms)',
+		id: 'duration',
+		default: 5000,
+		min: 50,
+		max: 30000,
+	}
+
+	const volumeOption: CompanionInputFieldNumber = {
+		type: 'number',
+		label: 'Target Volume (dB)',
+		id: 'volumeDb',
+		default: 0,
+		min: -100,
+		max: 12,
+	}
+
+	return TrackAction(
+		'Volume Fade',
+		getContext,
+		(track, evt) => FadeVolume(getContext, track, Number(evt.options.duration), Number(evt.options.volumeDb)),
+		[timeOption, volumeOption]
+	)
+}
+
+function FadeVolume(getContext: () => ActionContext, track: Track, duration: number, targetVolumeDb: number) {
+	// Audio fades are complicated due to the logarithmic nature of dB, and I am bad at math, so I have kept
+	// this as simple as possible
+	const stepDuration = 50
+	const steps = Math.ceil(duration / stepDuration)
+	const initialVolume = track.volumeDb
+	const currentVolumeDifference = targetVolumeDb - initialVolume
+
+	if (currentVolumeDifference === 0) {
+		return
+	}
+
+	const stepSize = currentVolumeDifference / steps
+	let currentStep = 0
+
+	getContext().log(
+		'debug',
+		`Beginning volume fade for track ${track.trackNumber} ${JSON.stringify({
+			duration,
+			stepDuration,
+			steps,
+			targetVolumeDb,
+			initialVolume,
+			stepSize,
+		})}`
+	)
+
+	const intervalId = setInterval(() => {
+		if (currentStep === steps || track.volumeDb === targetVolumeDb) {
+			clearInterval(intervalId)
+
+			// Just in case...
+			if (track.volumeDb != targetVolumeDb) {
+				track.setVolumeDb(targetVolumeDb)
+			}
+
+			return
+		}
+
+		currentStep++
+		track.setVolumeDb(initialVolume + currentStep * stepSize)
+	}, stepDuration)
 }
