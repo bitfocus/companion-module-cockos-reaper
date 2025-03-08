@@ -132,7 +132,7 @@ function TrackFxVariables(trackIndex: number, fxIndex: number): ReaperPropertyVa
 	return [
 		{
 			...TrackFxVariable(trackIndex, fxIndex, 'Bypass', 'Bypassed', 'isBypassed'),
-			valueConverter: (value) => (value ? 'Active' : 'Bypassed'),
+			valueConverter: (value) => (value ? 'Bypassed' : 'Active'),
 		},
 		{
 			...TrackFxVariable(trackIndex, fxIndex, 'Name', 'Name', 'name'),
