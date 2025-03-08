@@ -47,6 +47,12 @@ This module connects to the Cockos Reaper software.
 - Track Deselect
 - Track Monitoring Enable
 - Track Monitoring Disable
+- Track Set Volume (dB)
+- Track Set Volume (fader position)
+- Track Volume Up
+- Track Volume Down
+- Track Set Pan
+- Track Set Pan 2
 - Track FX Bypass
 - Track FX Open UI
 - Track FX Unbypass

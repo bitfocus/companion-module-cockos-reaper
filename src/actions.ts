@@ -3,6 +3,7 @@ import {
 	CompanionActionDefinitions,
 	CompanionActionEvent,
 	CompanionInputFieldNumber,
+	SomeCompanionActionInputField,
 } from '@companion-module/base'
 import { FloatMessage, OscMessage, Reaper, RecordMonitoringMode, StringMessage, Track, TrackFx } from 'reaper-osc'
 import { ModuleContext } from './index'
@@ -38,6 +39,12 @@ export enum ActionId {
 	TrackDeselect = 'track_deselect',
 	TrackMonitorEnable = 'track_monitor_enable',
 	TrackMonitorDisable = 'track_monitor_disable',
+	TrackSetVolumeDb = 'track_set_volume_db',
+	TrackSetVolumeFaderPosition = 'track_set_volume_fader_position',
+	TrackVolumeUp = 'track_volume_up',
+	TrackVolumeDown = 'track_volume_down',
+	TrackSetPan = 'track_set_pan',
+	TrackSetPan2 = 'track_set_pan2',
 
 	// Track FX
 	TrackFxBypass = 'track_fx_bypass',
@@ -134,6 +141,12 @@ export function GetActionsList(getContext: () => ActionContext): CompanionAction
 		[ActionId.TrackMonitorDisable]: TrackAction('Monitoring Disable', getContext, (track) =>
 			track.setMonitoringMode(RecordMonitoringMode.OFF)
 		),
+		[ActionId.TrackSetVolumeDb]: TrackSetVolumeDbAction(getContext),
+		[ActionId.TrackSetVolumeFaderPosition]: TrackSetVolumeFaderPositionAction(getContext),
+		[ActionId.TrackVolumeUp]: TrackVolumeRelativeAction(getContext, 'up'),
+		[ActionId.TrackVolumeDown]: TrackVolumeRelativeAction(getContext, 'down'),
+		[ActionId.TrackSetPan]: TrackSetPanAction(getContext),
+		[ActionId.TrackSetPan2]: TrackSetPan2Action(getContext),
 
 		// Track Fx actions
 		[ActionId.TrackFxBypass]: TrackFxAction('Bypass', getContext, (fx) => fx.bypass()),
@@ -292,11 +305,12 @@ function FxOption(): CompanionInputFieldNumber {
 function TrackAction(
 	name: string,
 	getContext: () => ActionContext,
-	action: (track: Track, evt: CompanionActionEvent) => void
+	action: (track: Track, evt: CompanionActionEvent) => void,
+	additionalOptions: SomeCompanionActionInputField[] = []
 ): CompanionActionDefinition {
 	return {
 		name: `Track ${name}`,
-		options: [TrackOption()],
+		options: [TrackOption(), ...additionalOptions],
 		callback: (evt) => {
 			const context = getContext()
 
@@ -333,4 +347,114 @@ function TrackFxAction(
 			action(fx)
 		},
 	}
+}
+
+function TrackSetVolumeDbAction(getContext: () => ActionContext): CompanionActionDefinition {
+	const volumeOption: CompanionInputFieldNumber = {
+		type: 'number',
+		label: 'Volume (dB)',
+		id: 'volumeDb',
+		default: 0,
+		min: -100,
+		max: 12,
+	}
+
+	return TrackAction(
+		'Set Volume (dB)',
+		getContext,
+		(track, evt) => {
+			track.setVolumeDb(Number(evt.options.volumeDb))
+		},
+		[volumeOption]
+	)
+}
+
+function TrackSetVolumeFaderPositionAction(getContext: () => ActionContext): CompanionActionDefinition {
+	const volumeOption: CompanionInputFieldNumber = {
+		type: 'number',
+		label: 'Volume (fader position)',
+		id: 'volumeFaderPos',
+		default: 0,
+		min: 0,
+		max: 1,
+	}
+
+	return TrackAction(
+		'Set Volume (fader position)',
+		getContext,
+		(track, evt) => {
+			track.setVolumeFaderPosition(Number(evt.options.volumeFaderPos))
+		},
+		[volumeOption]
+	)
+}
+
+function TrackVolumeRelativeAction(getContext: () => ActionContext, direction: 'up' | 'down') {
+	const stepSizeOption: CompanionInputFieldNumber = {
+		type: 'number',
+		label: 'Step Size',
+		id: 'stepSize',
+		default: 0.01,
+		min: 0.001,
+		max: 1,
+		step: 0.01,
+	}
+
+	return TrackAction(
+		`Volume ${direction === 'up' ? 'Up' : 'Down'}`,
+		getContext,
+		(track, evt) => {
+			const step = Number(evt.options.stepSize) * (direction === 'up' ? 1 : -1)
+
+			const newPosition =
+				direction === 'up'
+					? Math.min(track.volumeFaderPosition + step, 1)
+					: Math.max(track.volumeFaderPosition + step, 0)
+
+			track.setVolumeFaderPosition(newPosition)
+		},
+		[stepSizeOption]
+	)
+}
+
+function TrackSetPanAction(getContext: () => ActionContext): CompanionActionDefinition {
+	const panOption: CompanionInputFieldNumber = {
+		type: 'number',
+		label: 'Pan',
+		id: 'pan',
+		default: 0,
+		min: 0,
+		max: 1,
+		step: 0.1,
+	}
+
+	return TrackAction(
+		'Set Pan',
+		getContext,
+		(track, evt) => {
+			track.setPan(Number(evt.options.pan))
+		},
+		[panOption]
+	)
+}
+
+function TrackSetPan2Action(getContext: () => ActionContext): CompanionActionDefinition {
+	const panOption: CompanionInputFieldNumber = {
+		type: 'number',
+		label: 'Pan',
+		id: 'pan2',
+		default: 0,
+		min: 0,
+		max: 1,
+		step: 0.1,
+	}
+
+	return TrackAction(
+		'Set Pan 2',
+		getContext,
+		(track, evt) => {
+			track.setPan2(Number(evt.options.pan2))
+		},
+		[panOption]
+	)
 }

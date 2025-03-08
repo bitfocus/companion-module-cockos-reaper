@@ -14,56 +14,48 @@ export type ReaperPropertyVariableDefinition = {
 } & CompanionVariableDefinition
 
 export function GetVariableDefinitions(numberOfTracks: number, numberOfFx: number): ReaperPropertyVariableDefinition[] {
-	const variables: ReaperPropertyVariableDefinition[] = []
-
-	variables.push(...LegacyVariableDefinitions(numberOfTracks, numberOfFx))
-
-	return variables
-}
-
-function LegacyVariableDefinitions(numberOfTracks: number, numberOfFx: number): ReaperPropertyVariableDefinition[] {
 	const variables: ReaperPropertyVariableDefinition[] = [
 		{
-			...LegacyTransportVariable('playStatus', 'Play Status', 'isPlaying'),
+			...TransportVariable('playStatus', 'Play Status', 'isPlaying'),
 			valueConverter: (value) => (value ? 'Playing' : 'Paused'),
 		},
 		{
-			...LegacyTransportVariable('stopStatus', 'Stopped Status', 'isStopped'),
+			...TransportVariable('stopStatus', 'Stopped Status', 'isStopped'),
 			valueConverter: (value) => (value ? 'Stopped' : 'Playing'),
 		},
 		{
-			...LegacyTransportVariable('recordStatus', 'Record Status', 'isRecording'),
+			...TransportVariable('recordStatus', 'Record Status', 'isRecording'),
 			valueConverter: (value) => (value ? 'Recording' : 'Not Recording'),
 		},
 		{
-			...LegacyTransportVariable('rewindStatus', 'Rewind Status', 'isRewinding'),
+			...TransportVariable('rewindStatus', 'Rewind Status', 'isRewinding'),
 			valueConverter: (value) => (value ? 'Rewinding' : 'Not Rewinding'),
 		},
 		{
-			...LegacyTransportVariable('forwardStatus', 'Fast Forward Status', 'isFastForwarding'),
+			...TransportVariable('forwardStatus', 'Fast Forward Status', 'isFastForwarding'),
 			valueConverter: (value) => (value ? 'Fast Forwarding' : 'Not Fast Forwarding'),
 		},
 		{
-			...LegacyTransportVariable('repeatStatus', 'Repeat Status', 'isRepeatEnabled'),
+			...TransportVariable('repeatStatus', 'Repeat Status', 'isRepeatEnabled'),
 			valueConverter: (value) => (value ? 'Active' : 'Inactive'),
 		},
 		{
-			...LegacyTransportVariable('repeatStatus', 'Repeat Status', 'isRepeatEnabled'),
+			...TransportVariable('repeatStatus', 'Repeat Status', 'isRepeatEnabled'),
 			variableId: 'clickStatus',
 			name: 'Click Status',
 			getProperty: NotifyPropertySelector<Reaper>((reaper) => reaper, 'isMetronomeEnabled'),
 			valueConverter: (value) => (value ? 'Active' : 'Inactive'),
 		},
 		{
-			...LegacyTransportVariable('frames', 'Frames', 'frames'),
+			...TransportVariable('frames', 'Frames', 'frames'),
 			valueConverter: (value) => value,
 		},
 		{
-			...LegacyTransportVariable('beat', 'Beat', 'beat'),
+			...TransportVariable('beat', 'Beat', 'beat'),
 			valueConverter: (value) => value,
 		},
 		{
-			...LegacyTransportVariable('time', 'Time', 'time'),
+			...TransportVariable('time', 'Time', 'time'),
 			valueConverter: (value) => {
 				const hours = Math.floor(value / 3600)
 				const minutes = Math.floor((value / 60) % 60)
@@ -77,7 +69,7 @@ function LegacyVariableDefinitions(numberOfTracks: number, numberOfFx: number): 
 	]
 
 	for (let i = 0; i < numberOfTracks; i++) {
-		const trackVariables = LegacyTrackVariables(i, numberOfFx)
+		const trackVariables = TrackVariables(i, numberOfFx)
 
 		variables.push(...trackVariables)
 	}
@@ -85,35 +77,50 @@ function LegacyVariableDefinitions(numberOfTracks: number, numberOfFx: number): 
 	return variables
 }
 
-function LegacyTrackVariables(trackIndex: number, numberOfFx: number): ReaperPropertyVariableDefinition[] {
+function TrackVariables(trackIndex: number, numberOfFx: number): ReaperPropertyVariableDefinition[] {
 	const variables: ReaperPropertyVariableDefinition[] = [
 		{
-			...LegacyTrackVariable(trackIndex, 'Mute', 'Muted', 'isMuted'),
+			...TrackVariable(trackIndex, 'Mute', 'Muted', 'isMuted'),
 			valueConverter: (value) => (value ? 'Muted' : 'Not Muted'),
 		},
 		{
-			...LegacyTrackVariable(trackIndex, 'Solo', 'Soloed', 'isSoloed'),
+			...TrackVariable(trackIndex, 'Solo', 'Soloed', 'isSoloed'),
 			valueConverter: (value) => (value ? 'Soloed' : 'Not Soloed'),
 		},
 		{
-			...LegacyTrackVariable(trackIndex, 'Recarm', 'Armed for Record', 'isRecordArmed'),
+			...TrackVariable(trackIndex, 'Recarm', 'Armed for Record', 'isRecordArmed'),
 			valueConverter: (value) => (value ? 'Record Armed' : 'Record Disarmed'),
 		},
 		{
-			...LegacyTrackVariable(trackIndex, 'Select', 'Selected', 'isSelected'),
+			...TrackVariable(trackIndex, 'Select', 'Selected', 'isSelected'),
 			valueConverter: (value) => (value ? 'Selected' : 'Not Selected'),
 		},
 		{
-			...LegacyTrackVariable(trackIndex, 'Name', 'Name', 'name'),
+			...TrackVariable(trackIndex, 'Name', 'Name', 'name'),
 		},
 		{
-			...LegacyTrackVariable(trackIndex, 'Monitor', 'Monitoring', 'recordMonitoring'),
+			...TrackVariable(trackIndex, 'Monitor', 'Monitoring', 'recordMonitoring'),
 			valueConverter: (value) => (value ? 'Monitoring' : 'Not Monitoring'),
+		},
+		{
+			...TrackVariable(trackIndex, 'VolumeDb', 'Volume (dB)', 'volumeDb'),
+			valueConverter: (value) => `${value > 0 ? '+' : ''}${value.toFixed(2)}dB`,
+		},
+		{
+			...TrackVariable(trackIndex, 'VolumeFaderPos', 'Volume (fader position)', 'volumeFaderPosition'),
+		},
+		{
+			...TrackVariable(trackIndex, 'Pan', 'Pan', 'pan'),
+			valueConverter: PanValueConverter,
+		},
+		{
+			...TrackVariable(trackIndex, 'Pan2', 'Pan 2', 'pan2'),
+			valueConverter: PanValueConverter,
 		},
 	]
 
 	for (let i = 0; i < numberOfFx; i++) {
-		const fxVariables = LegacyTrackFxVariables(trackIndex, i)
+		const fxVariables = TrackFxVariables(trackIndex, i)
 
 		variables.push(...fxVariables)
 	}
@@ -121,17 +128,17 @@ function LegacyTrackVariables(trackIndex: number, numberOfFx: number): ReaperPro
 	return variables
 }
 
-function LegacyTrackFxVariables(trackIndex: number, fxIndex: number): ReaperPropertyVariableDefinition[] {
+function TrackFxVariables(trackIndex: number, fxIndex: number): ReaperPropertyVariableDefinition[] {
 	return [
 		{
-			...LegacyTrackFxVariable(trackIndex, fxIndex, 'Bypass', 'Bypassed', 'isBypassed'),
+			...TrackFxVariable(trackIndex, fxIndex, 'Bypass', 'Bypassed', 'isBypassed'),
 			valueConverter: (value) => (value ? 'Active' : 'Bypassed'),
 		},
 		{
-			...LegacyTrackFxVariable(trackIndex, fxIndex, 'Name', 'Name', 'name'),
+			...TrackFxVariable(trackIndex, fxIndex, 'Name', 'Name', 'name'),
 		},
 		{
-			...LegacyTrackFxVariable(trackIndex, fxIndex, 'Openui', 'UI Open', 'isUiOpen'),
+			...TrackFxVariable(trackIndex, fxIndex, 'Openui', 'UI Open', 'isUiOpen'),
 			valueConverter: (value) => (value ? 'Open' : 'Closed'),
 		},
 	]
@@ -139,7 +146,7 @@ function LegacyTrackFxVariables(trackIndex: number, fxIndex: number): ReaperProp
 
 type ReaperPropertyVariable = Omit<ReaperPropertyVariableDefinition, 'valueConverter'>
 
-function LegacyTransportVariable(id: string, name: string, property: keyof Transport & string): ReaperPropertyVariable {
+function TransportVariable(id: string, name: string, property: keyof Transport & string): ReaperPropertyVariable {
 	return {
 		variableId: id,
 		name: name,
@@ -147,7 +154,7 @@ function LegacyTransportVariable(id: string, name: string, property: keyof Trans
 	}
 }
 
-function LegacyTrackVariable(
+function TrackVariable(
 	trackIndex: number,
 	id: string,
 	name: string,
@@ -162,7 +169,7 @@ function LegacyTrackVariable(
 	}
 }
 
-function LegacyTrackFxVariable(
+function TrackFxVariable(
 	trackIndex: number,
 	fxIndex: number,
 	id: string,
@@ -192,4 +199,26 @@ function NotifyPropertySelector<T extends INotifyPropertyChanged>(
 		property: propertyName,
 		valueSelector: (item: T) => item[propertyName],
 	})
+}
+
+function PanValueConverter(value: any): string {
+	let pan = Math.fround(Number(value))
+
+	// TODO: Add PanStr to reaper-osc and use that instead - these values don't always line up perfectly with
+	// what's shown in Reaper due to differences in rounding
+	if (pan > 0.5) {
+		pan = pan - 0.5
+
+		const pct = Math.round(pan * 2 * 100)
+
+		return `${pct}%R`
+	} else if (pan < 0.5) {
+		pan = 0.5 - pan
+
+		const pct = Math.round(pan * 2 * 100)
+
+		return `${pct}%L`
+	} else {
+		return 'C'
+	}
 }
