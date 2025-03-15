@@ -77,7 +77,9 @@ class ControllerInstance extends InstanceBase<ModuleConfig> {
 
 		this.log('debug', `Reaper Configuration: ${JSON.stringify(reaperConfig, null, 2)}`)
 
-		await this.connectOsc()
+		if (!(await this.connectOsc())) {
+			return
+		}
 
 		if (config.refreshOnInit) {
 			this.log('info', 'Refreshing OSC values')
@@ -103,17 +105,24 @@ class ControllerInstance extends InstanceBase<ModuleConfig> {
 		})
 	}
 
-	private async connectOsc() {
+	private async connectOsc(): Promise<boolean> {
 		if (this._reaper === null) {
 			this.log('error', 'Reaper is not configured')
-			return
+			return false
 		}
 
 		this.updateStatus(InstanceStatus.Connecting)
 
-		await this._reaper.start()
+		try {
+			await this._reaper.start()
+		} catch (err) {
+			this.log('error', `Failed to connect: ${JSON.stringify(err)}`)
+			this.updateStatus(InstanceStatus.ConnectionFailure)
+			return false
+		}
 
 		this.updateStatus(InstanceStatus.Ok)
+		return true
 	}
 
 	private async disconnectOsc() {
