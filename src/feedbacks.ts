@@ -302,7 +302,7 @@ function TrackFeedback(
 				// Unfortunately we cannot **receive** messages for the master track at present and therefore it is not supported for feedback
 				// See https://github.com/LykaiosNZ/reaper-osc.js/issues/35 for more info
 				min: 1,
-				max: 8,
+				max: 512,
 			},
 		],
 		...ReaperPropertyFeedbackCallbacks<Track>(
@@ -335,7 +335,7 @@ function TrackFxFeedback(
 				id: 'trackNumber',
 				default: 1,
 				min: 0,
-				max: 8,
+				max: 512,
 			},
 			{
 				type: 'number',
@@ -343,7 +343,7 @@ function TrackFxFeedback(
 				id: 'fxNumber',
 				default: 1,
 				min: 0,
-				max: 8,
+				max: 512,
 			},
 		],
 		...ReaperPropertyFeedbackCallbacks<TrackFx>(
