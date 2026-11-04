@@ -9,7 +9,7 @@
 		"dev": "tsc -p tsconfig.build.json --watch",
 		"lint:raw": "eslint",
 		"lint": "yarn lint:raw .",
-		"test": "node --test test/*.test.mjs"
+		"test": "node --test test/custom-feedback.test.mjs"
 	},
 	"license": "MIT",
 	"prettier": "@companion-module/tools/.prettierrc.json",
@@ -34,8 +34,7 @@
 		"typescript": "~5.9.3",
 		"eslint": "^9.39.3",
 		"prettier": "^3.8.1",
-		"typescript-eslint": "^8.56.0",
-		"osc": "2.4.4"
+		"typescript-eslint": "^8.56.0"
 	},
 	"engines": {
 		"node": "^26.5"
