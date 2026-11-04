@@ -158,7 +158,7 @@ function TrackVariable(
 	trackIndex: number,
 	id: string,
 	name: string,
-	property: keyof Track & string
+	property: keyof Track & string,
 ): ReaperPropertyVariable {
 	const trackNumber = trackIndex + 1
 
@@ -174,7 +174,7 @@ function TrackFxVariable(
 	fxIndex: number,
 	id: string,
 	name: string,
-	property: keyof TrackFx & string
+	property: keyof TrackFx & string,
 ): ReaperPropertyVariable {
 	const trackNumber = trackIndex + 1
 	const fxNumber = fxIndex + 1
@@ -188,7 +188,7 @@ function TrackFxVariable(
 
 function NotifyPropertySelector<T extends INotifyPropertyChanged>(
 	selector: (reaper: Reaper) => T,
-	propertyName: keyof T & string
+	propertyName: keyof T & string,
 ): (reaper: Reaper) => {
 	item: T
 	property: keyof T & string

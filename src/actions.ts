@@ -74,10 +74,10 @@ export function GetActionsList(getContext: () => ActionContext): CompanionAction
 		[ActionId.StartRewind]: BasicAction('Rewind (Start)', getContext, (reaper) => reaper.transport.startRewinding()),
 		[ActionId.StopRewind]: BasicAction('Rewind (Stop)', getContext, (reaper) => reaper.transport.stopRewinding()),
 		[ActionId.StartForward]: BasicAction('Fast Forward (Start)', getContext, (reaper) =>
-			reaper.transport.startFastForwarding()
+			reaper.transport.startFastForwarding(),
 		),
 		[ActionId.StopForward]: BasicAction('Fast Forward (Stop)', getContext, (reaper) =>
-			reaper.transport.stopFastForwarding()
+			reaper.transport.stopFastForwarding(),
 		),
 		[ActionId.ToggleClick]: BasicAction('Toggle Click/Metronome', getContext, (reaper) => reaper.toggleMetronome()),
 		[ActionId.ToggleRepeat]: BasicAction('Toggle Repeat', getContext, (reaper) => reaper.transport.toggleRepeat()),
@@ -137,10 +137,10 @@ export function GetActionsList(getContext: () => ActionContext): CompanionAction
 		[ActionId.TrackSelect]: TrackAction('Select', getContext, (track) => track.select()),
 		[ActionId.TrackDeselect]: TrackAction('Deselect', getContext, (track) => track.deselect()),
 		[ActionId.TrackMonitorEnable]: TrackAction('Monitoring Enable', getContext, (track) =>
-			track.setMonitoringMode(RecordMonitoringMode.ON)
+			track.setMonitoringMode(RecordMonitoringMode.ON),
 		),
 		[ActionId.TrackMonitorDisable]: TrackAction('Monitoring Disable', getContext, (track) =>
-			track.setMonitoringMode(RecordMonitoringMode.OFF)
+			track.setMonitoringMode(RecordMonitoringMode.OFF),
 		),
 		[ActionId.TrackSetVolumeDb]: TrackSetVolumeDbAction(getContext),
 		[ActionId.TrackSetVolumeFaderPosition]: TrackSetVolumeFaderPositionAction(getContext),
@@ -156,7 +156,7 @@ export function GetActionsList(getContext: () => ActionContext): CompanionAction
 		[ActionId.TrackFxUnbypass]: TrackFxAction('Unbypass', getContext, (fx) => fx.unbypass()),
 		[ActionId.TrackFxCloseUi]: TrackFxAction('Close UI', getContext, (fx) => fx.closeUi()),
 		[ActionId.TrackFxToggleUi]: TrackFxAction('Toggle UI', getContext, (fx) =>
-			fx.isUiOpen ? fx.closeUi() : fx.openUi()
+			fx.isUiOpen ? fx.closeUi() : fx.openUi(),
 		),
 
 		// General
@@ -210,15 +210,7 @@ export function GetActionsList(getContext: () => ActionContext): CompanionAction
 					type: 'textinput',
 					label: 'Value',
 					id: 'value',
-					isVisible: (opts) => {
-						switch (opts.type) {
-							case 'f':
-							case 's':
-								return true
-							default:
-								return false
-						}
-					},
+					isVisibleExpression: '$(options:type) == "f" || $(options:type) == "s"',
 					useVariables: true,
 				},
 			],
@@ -266,7 +258,7 @@ export function GetActionsList(getContext: () => ActionContext): CompanionAction
 function BasicAction(
 	name: string,
 	getContext: () => ActionContext,
-	action: (reaper: Reaper) => void
+	action: (reaper: Reaper) => void,
 ): CompanionActionDefinition {
 	return {
 		name: name,
@@ -308,7 +300,7 @@ function TrackAction(
 	name: string,
 	getContext: () => ActionContext,
 	action: (track: Track, evt: CompanionActionEvent) => void,
-	additionalOptions: SomeCompanionActionInputField[] = []
+	additionalOptions: SomeCompanionActionInputField[] = [],
 ): CompanionActionDefinition {
 	return {
 		name: `Track ${name}`,
@@ -331,7 +323,7 @@ function TrackAction(
 function TrackFxAction(
 	name: string,
 	getContext: () => ActionContext,
-	action: (fx: TrackFx) => void
+	action: (fx: TrackFx) => void,
 ): CompanionActionDefinition {
 	return {
 		name: `Track Fx ${name}`,
@@ -367,7 +359,7 @@ function TrackSetVolumeDbAction(getContext: () => ActionContext): CompanionActio
 		(track, evt) => {
 			track.setVolumeDb(Number(evt.options.volumeDb))
 		},
-		[volumeOption]
+		[volumeOption],
 	)
 }
 
@@ -387,7 +379,7 @@ function TrackSetVolumeFaderPositionAction(getContext: () => ActionContext): Com
 		(track, evt) => {
 			track.setVolumeFaderPosition(Number(evt.options.volumeFaderPos))
 		},
-		[volumeOption]
+		[volumeOption],
 	)
 }
 
@@ -415,7 +407,7 @@ function TrackVolumeRelativeAction(getContext: () => ActionContext, direction: '
 
 			track.setVolumeFaderPosition(newPosition)
 		},
-		[stepSizeOption]
+		[stepSizeOption],
 	)
 }
 
@@ -436,7 +428,7 @@ function TrackSetPanAction(getContext: () => ActionContext): CompanionActionDefi
 		(track, evt) => {
 			track.setPan(Number(evt.options.pan))
 		},
-		[panOption]
+		[panOption],
 	)
 }
 
@@ -457,7 +449,7 @@ function TrackSetPan2Action(getContext: () => ActionContext): CompanionActionDef
 		(track, evt) => {
 			track.setPan2(Number(evt.options.pan2))
 		},
-		[panOption]
+		[panOption],
 	)
 }
 
@@ -484,7 +476,7 @@ function TrackVolumeFadeAction(getContext: () => ActionContext): CompanionAction
 		'Volume Fade',
 		getContext,
 		(track, evt) => FadeVolume(getContext, track, Number(evt.options.duration), Number(evt.options.volumeDb)),
-		[timeOption, volumeOption]
+		[timeOption, volumeOption],
 	)
 }
 
@@ -512,7 +504,7 @@ function FadeVolume(getContext: () => ActionContext, track: Track, duration: num
 			targetVolumeDb,
 			initialVolume,
 			stepSize,
-		})}`
+		})}`,
 	)
 
 	const intervalId = setInterval(() => {

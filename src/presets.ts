@@ -126,7 +126,7 @@ function TrackButtonPreset(props: TrackButtonPresetProps): CompanionButtonPreset
 					},
 					style: DefaultFeedbackStyles[props.feedbackId],
 				},
-		  ]
+			]
 		: []
 
 	const down = props.actionId
@@ -137,7 +137,7 @@ function TrackButtonPreset(props: TrackButtonPresetProps): CompanionButtonPreset
 						track: 1,
 					},
 				},
-		  ]
+			]
 		: []
 
 	return {

@@ -5,7 +5,7 @@ export function BasicTextInput(
 	id: string,
 	defaultValue?: string,
 	required?: boolean,
-	useVariables?: boolean
+	useVariables?: boolean,
 ): CompanionInputFieldTextInput {
 	return {
 		type: 'textinput',
