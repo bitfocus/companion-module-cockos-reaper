@@ -2,7 +2,7 @@ import { CompanionStaticUpgradeResult, CompanionStaticUpgradeScript } from '@com
 import { ModuleConfig } from './config'
 
 export function CreateUseInvertForFeedbacksUpgradeScript(
-	upgradeMap: Record<string, BooleanFeedbackOption>
+	upgradeMap: Record<string, BooleanFeedbackOption>,
 ): CompanionStaticUpgradeScript<ModuleConfig> {
 	return (_, props) => {
 		const changedFeedbacks: CompanionStaticUpgradeResult<unknown>['updatedFeedbacks'] = []

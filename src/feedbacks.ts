@@ -143,28 +143,28 @@ export function GetFeedbacksList(getContext: () => FeedbackContext): CompanionFe
 			'Track Muted',
 			'Change style when a track is muted',
 			DefaultFeedbackStyles[FeedbackId.TrackMute],
-			'isMuted'
+			'isMuted',
 		),
 		[FeedbackId.TrackSolo]: TrackFeedback(
 			getContext,
 			'Track Soloed',
 			'Change style when a track is soloed',
 			DefaultFeedbackStyles[FeedbackId.TrackSolo],
-			'isSoloed'
+			'isSoloed',
 		),
 		[FeedbackId.TrackRecordArm]: TrackFeedback(
 			getContext,
 			'Track Armed',
 			'Change style when a track is armed for recording',
 			DefaultFeedbackStyles[FeedbackId.TrackRecordArm],
-			'isRecordArmed'
+			'isRecordArmed',
 		),
 		[FeedbackId.TrackSelected]: TrackFeedback(
 			getContext,
 			'Track Selected',
 			'Change style when a track is selected',
 			DefaultFeedbackStyles[FeedbackId.TrackSelected],
-			'isSelected'
+			'isSelected',
 		),
 		[FeedbackId.TrackMonitor]: TrackFeedback(
 			getContext,
@@ -172,7 +172,7 @@ export function GetFeedbacksList(getContext: () => FeedbackContext): CompanionFe
 			'Change style when monitoring is enabled for a track',
 			DefaultFeedbackStyles[FeedbackId.TrackMonitor],
 			'recordMonitoring',
-			RecordMonitoringMode.ON
+			RecordMonitoringMode.ON,
 		),
 
 		// Track FX
@@ -181,14 +181,14 @@ export function GetFeedbacksList(getContext: () => FeedbackContext): CompanionFe
 			'Track Fx Active',
 			'Change style when an FX is active',
 			DefaultFeedbackStyles[FeedbackId.TrackFxBypass],
-			'isBypassed'
+			'isBypassed',
 		),
 		[FeedbackId.TrackFxOpenUi]: TrackFxFeedback(
 			getContext,
 			'Track FX UI Open',
 			'Change style when an FX UI window is open',
 			DefaultFeedbackStyles[FeedbackId.TrackFxOpenUi],
-			'isUiOpen'
+			'isUiOpen',
 		),
 
 		// Custom Message
@@ -240,7 +240,7 @@ export function GetFeedbacksList(getContext: () => FeedbackContext): CompanionFe
 							<string>evt.options.msg,
 							<string>evt.options.value,
 							callback,
-							async (value) => callbackCtx.parseVariablesInString(value)
+							async (value) => callbackCtx.parseVariablesInString(value),
 						)
 						break
 					case 's':
@@ -249,7 +249,7 @@ export function GetFeedbacksList(getContext: () => FeedbackContext): CompanionFe
 							<string>evt.options.msg,
 							<string>evt.options.value,
 							callback,
-							async (value) => callbackCtx.parseVariablesInString(value)
+							async (value) => callbackCtx.parseVariablesInString(value),
 						)
 						break
 					default:
@@ -286,7 +286,7 @@ function TrackFeedback(
 	description: string,
 	defaultStyle: Partial<CompanionButtonStyleProps>,
 	property: keyof Track & string,
-	comparisonValue?: InputValue
+	comparisonValue?: InputValue,
 ): CompanionBooleanFeedbackDefinition {
 	return {
 		type: 'boolean',
@@ -310,7 +310,7 @@ function TrackFeedback(
 			(reaper, evt) => GetTrack(reaper, Number(evt.options.trackNumber)),
 			property,
 			undefined,
-			comparisonValue ?? true
+			comparisonValue ?? true,
 		),
 	}
 }
@@ -321,7 +321,7 @@ function TrackFxFeedback(
 	description: string,
 	defaultStyle: Partial<CompanionButtonStyleProps>,
 	property: keyof TrackFx & string,
-	comparisonValue?: InputValue
+	comparisonValue?: InputValue,
 ): CompanionBooleanFeedbackDefinition {
 	return {
 		type: 'boolean',
@@ -351,7 +351,7 @@ function TrackFxFeedback(
 			(reaper, evt) => GetTrackFx(reaper, Number(evt.options.trackNumber), Number(evt.options.fxNumber)),
 			property,
 			undefined,
-			comparisonValue
+			comparisonValue,
 		),
 	}
 }
@@ -360,14 +360,14 @@ function TransportFeedbackCallbacks(
 	getContext: () => FeedbackContext,
 	property: keyof Transport & string,
 	optionId?: string,
-	comparisonValue?: string
+	comparisonValue?: string,
 ) {
 	return ReaperPropertyFeedbackCallbacks<Transport>(
 		getContext,
 		(reaper) => reaper.transport,
 		property,
 		optionId,
-		comparisonValue
+		comparisonValue,
 	)
 }
 
@@ -376,7 +376,7 @@ function ReaperPropertyFeedbackCallbacks<T extends INotifyPropertyChanged>(
 	selector: (reaper: Reaper, evt: CompanionFeedbackBooleanEvent) => T | undefined,
 	property: keyof T & string,
 	comparisonOption?: string,
-	comparisonValue?: InputValue
+	comparisonValue?: InputValue,
 ) {
 	return {
 		callback: (evt: CompanionFeedbackBooleanEvent) => {
@@ -404,7 +404,7 @@ function SubscribeToProperty<T extends INotifyPropertyChanged>(
 	evt: CompanionFeedbackBooleanEvent,
 	getContext: () => FeedbackContext,
 	selector: (reaper: Reaper, evt: CompanionFeedbackBooleanEvent) => T | undefined,
-	property: keyof T & string
+	property: keyof T & string,
 ) {
 	const context = getContext()
 	const selected = selector(context.reaper, evt)
@@ -427,7 +427,7 @@ function CustomStringFeedbackHandler(
 	address: string,
 	matchValue: string,
 	callback: (state: boolean) => void,
-	parseVariables: (value: string) => Promise<string>
+	parseVariables: (value: string) => Promise<string>,
 ): IMessageHandler {
 	return new StringMessageHandler(address, (messageValue) => {
 		parseVariables(matchValue).then(
@@ -436,7 +436,7 @@ function CustomStringFeedbackHandler(
 			},
 			(reason) => {
 				getContext().log('error', `error parsing variable for custom message feedback: ${reason}`)
-			}
+			},
 		)
 	})
 }
@@ -446,7 +446,7 @@ function CustomFloatFeedbackHandler(
 	address: string,
 	matchValue: string,
 	callback: (state: boolean) => void,
-	parseVariables: (value: string) => Promise<string>
+	parseVariables: (value: string) => Promise<string>,
 ): IMessageHandler {
 	return new FloatMessageHandler(address, (messageValue) => {
 		parseVariables(matchValue).then(
@@ -460,7 +460,7 @@ function CustomFloatFeedbackHandler(
 							intitial_value: matchValue,
 							expanded: expanded,
 							parsed: number.toString(),
-						})}`
+						})}`,
 					)
 					return
 				}
@@ -469,7 +469,7 @@ function CustomFloatFeedbackHandler(
 			},
 			(reason) => {
 				getContext().log('error', `error parsing variable for custom message feedback: ${reason}`)
-			}
+			},
 		)
 	})
 }

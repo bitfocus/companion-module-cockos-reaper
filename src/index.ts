@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
 	CompanionVariableValues,
 	InstanceBase,
@@ -30,7 +29,7 @@ class ControllerInstance extends InstanceBase<ModuleConfig> {
 		await this.configUpdated(config)
 
 		this.setActionDefinitions(
-			GetActionsList(() => ({ reaper: this._reaper!, log: (level, message) => this.log(level, message) }))
+			GetActionsList(() => ({ reaper: this._reaper!, log: (level, message) => this.log(level, message) })),
 		)
 
 		this.setPresetDefinitions(GetPresetsList())
@@ -41,7 +40,7 @@ class ControllerInstance extends InstanceBase<ModuleConfig> {
 				checkFeedback: (feedbackId) => this.checkFeedbacksById(feedbackId),
 				bindings: this._feedbackBindings,
 				customMessageFeedbacks: this._customMessageFeedbacks,
-			}))
+			})),
 		)
 	}
 
