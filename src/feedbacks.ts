@@ -66,7 +66,11 @@ export type FeedbackBindings = {
 	[id: string]: () => void
 }
 
-export type CustomMessageFeedback = { handler: IMessageHandler; getState: () => boolean }
+export type CustomMessageFeedback = {
+	handler: IMessageHandler
+	getState: () => boolean
+	updateOptions: (options: CompanionFeedbackBooleanEvent['options']) => void
+}
 
 export type CustomMessageFeedbacks = {
 	[id: string]: CustomMessageFeedback
@@ -216,10 +220,12 @@ export function GetFeedbacksList(getContext: () => FeedbackContext): CompanionFe
 
 				const feedback = context.customMessageFeedbacks[evt.id]
 
+				feedback.updateOptions(evt.options)
 				return feedback.getState()
 			},
-			subscribe: (evt, callbackCtx) => {
+			subscribe: (evt) => {
 				const context = getContext()
+				let options = { ...evt.options }
 
 				const state = { state: false }
 				const callback = (result: boolean) => {
@@ -231,33 +237,34 @@ export function GetFeedbacksList(getContext: () => FeedbackContext): CompanionFe
 					context.checkFeedback(evt.id)
 				}
 
-				let handler: IMessageHandler
-
-				switch (evt.options.type) {
-					case 'f':
-						handler = CustomFloatFeedbackHandler(
-							getContext,
-							<string>evt.options.msg,
-							<string>evt.options.value,
-							callback,
-							async (value) => callbackCtx.parseVariablesInString(value),
-						)
-						break
-					case 's':
-						handler = CustomStringFeedbackHandler(
-							getContext,
-							<string>evt.options.msg,
-							<string>evt.options.value,
-							callback,
-							async (value) => callbackCtx.parseVariablesInString(value),
-						)
-						break
-					default:
-						context.log('error', `Custom message feedback has invalid value for type: ${evt.options.type}`)
-						return
+				const createHandler = (): IMessageHandler | undefined => {
+					switch (options.type) {
+						case 'f':
+							return CustomFloatFeedbackHandler(getContext, <string>options.msg, () => <string>options.value, callback)
+						case 's':
+							return CustomStringFeedbackHandler(<string>options.msg, () => <string>options.value, callback)
+						default:
+							context.log('error', `Custom message feedback has invalid value for type: ${options.type}`)
+							return undefined
+					}
 				}
+				const handler = createHandler()
+				if (!handler) return
 
-				context.customMessageFeedbacks[evt.id] = { handler: handler, getState: () => state.state }
+				const feedback: CustomMessageFeedback = {
+					handler,
+					getState: () => state.state,
+					updateOptions: (current) => {
+						const rebuild = options.msg !== current.msg || options.type !== current.type
+						options = { ...current }
+						if (rebuild) {
+							const nextHandler = createHandler()
+							if (nextHandler) feedback.handler = nextHandler
+							state.state = false
+						}
+					},
+				}
+				context.customMessageFeedbacks[evt.id] = feedback
 			},
 			unsubscribe: (evt) => {
 				const context = getContext()
@@ -421,55 +428,33 @@ function SubscribeToProperty<T extends INotifyPropertyChanged>(
 	AddBinding(context, evt.id, unsubscribe)
 }
 
-// Custom Message Feedback handlers currently don't support parsing the address, only the value to match on.
+// Entity options arrive prepared by the host. Read the current comparison on each message.
 function CustomStringFeedbackHandler(
-	getContext: () => FeedbackContext,
 	address: string,
-	matchValue: string,
+	getMatchValue: () => string,
 	callback: (state: boolean) => void,
-	parseVariables: (value: string) => Promise<string>,
 ): IMessageHandler {
 	return new StringMessageHandler(address, (messageValue) => {
-		parseVariables(matchValue).then(
-			(expanded) => {
-				callback(expanded === messageValue)
-			},
-			(reason) => {
-				getContext().log('error', `error parsing variable for custom message feedback: ${reason}`)
-			},
-		)
+		callback(getMatchValue() === messageValue)
 	})
 }
 
 function CustomFloatFeedbackHandler(
 	getContext: () => FeedbackContext,
 	address: string,
-	matchValue: string,
+	getMatchValue: () => string,
 	callback: (state: boolean) => void,
-	parseVariables: (value: string) => Promise<string>,
 ): IMessageHandler {
 	return new FloatMessageHandler(address, (messageValue) => {
-		parseVariables(matchValue).then(
-			(expanded) => {
-				const number = parseFloat(expanded)
-
-				if (isNaN(number)) {
-					getContext().log(
-						'warn',
-						`value was not a float: ${JSON.stringify({
-							intitial_value: matchValue,
-							expanded: expanded,
-							parsed: number.toString(),
-						})}`,
-					)
-					return
-				}
-
-				callback(number === messageValue)
-			},
-			(reason) => {
-				getContext().log('error', `error parsing variable for custom message feedback: ${reason}`)
-			},
-		)
+		const matchValue = getMatchValue()
+		const number = parseFloat(matchValue)
+		if (isNaN(number)) {
+			getContext().log(
+				'warn',
+				`value was not a float: ${JSON.stringify({ value: matchValue, parsed: number.toString() })}`,
+			)
+			return
+		}
+		callback(number === messageValue)
 	})
 }
